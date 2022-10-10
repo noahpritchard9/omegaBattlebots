@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { HomeScreen } from './screens/home'
 import { Profile } from './screens/profile'
+import { Map } from './screens/map'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,7 +22,8 @@ const App = () => {
 						{/* <HomeScreen /> */}
 						<Stack.Screen name='StatusBar' component={StatusBar} />
 						{/* <StatusBar /> */}
-            <Stack.Screen name='Profile' component={Profile}/>
+						<Stack.Screen name='Profile' component={Profile} />
+						<Stack.Screen name='Map' component={Map} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</SafeAreaProvider>

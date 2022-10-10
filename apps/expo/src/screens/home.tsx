@@ -112,6 +112,9 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 				>
 					<Text>Profile</Text>
 				</Pressable>
+				<Pressable onPress={() => navigation.navigate('Map')}>
+					<Text>Maps</Text>
+				</Pressable>
 
 				<View className='py-2'>
 					{showUser ? (
