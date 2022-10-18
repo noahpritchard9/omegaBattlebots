@@ -15,6 +15,10 @@
   },
   "devDependencies": {
     "prettier": "latest",
+    "prisma": "^4.5.0",
     "turbo": "latest"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.5.0"
   }
 }
