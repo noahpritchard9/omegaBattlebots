@@ -18,6 +18,8 @@ const UserInfo: React.FC<{
 const Home: NextPage = () => {
 	const userQuery = trpc.user.all.useQuery()
 
+	const names = ['Kyle', 'Luisa', 'Noah', 'Sudhi']
+
 	return (
 		<>
 			<Head>
@@ -28,9 +30,16 @@ const Home: NextPage = () => {
 				<h1 className='text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700'>
 					Senior Design{' '}
 				</h1>
-				<div className='flex items-center justify-center w-full pt-6 text-2xl text-blue-500'>
+				<div className='flex items-center justify-center gap-4 mb-4 font-bold'>
+					{names.map((name, index) => (
+						<h3 className='text-3xl' key={index}>
+							{name}
+						</h3>
+					))}
+				</div>
+				{/* <div className='flex items-center justify-center w-full pt-6 text-2xl text-blue-500'>
 					{userQuery.data ? (
-						<div className='flex flex-col gap-4'>
+						<div className='flex gap-4'>
 							{userQuery.data?.map(u => {
 								return <UserInfo key={u.id} user={u} />
 							})}
@@ -38,6 +47,15 @@ const Home: NextPage = () => {
 					) : (
 						<p>Loading..</p>
 					)}
+				</div> */}
+				<div>
+					<iframe
+						src='https://docs.google.com/presentation/d/e/2PACX-1vRXo6poJL7M9pRCHqQnOoSbm_Ql5WuYClUyT3Pah-4Iz4DkwOsCwIXTorjeH7Brjq2P15jYJv-ecKOW/embed?start=false&loop=false&delayms=3000'
+						frameBorder='0'
+						width='960'
+						height='569'
+						allowFullScreen
+					></iframe>
 				</div>
 			</main>
 		</>
