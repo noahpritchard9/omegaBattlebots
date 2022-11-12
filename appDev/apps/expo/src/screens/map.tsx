@@ -3,6 +3,8 @@ import { Dimensions, SafeAreaView, StyleSheet, View, Text } from 'react-native'
 import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 
+import { GOOGLE_MAPS_API_KEY } from '../apiKeys'
+
 const { width, height } = Dimensions.get('window')
 
 const ASPECT_RATIO = width / height
@@ -19,8 +21,6 @@ const INITIAL_REGION = {
 const origin: LatLng = { latitude: 37.79879, longitude: -122.442753 }
 
 const dest: LatLng = { latitude: 37.790651, longitude: -122.422497 }
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCTW63C0yWF4hxbX4dovYZJNzRwyw_W_Ss'
 
 export const Map = (navigation: { navigation: any }) => {
 	const mapRef = useRef<MapView>(null)
