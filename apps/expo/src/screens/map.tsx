@@ -1,5 +1,8 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Button } from 'react-native'
 import MapView, { Polyline } from 'react-native-maps'
+import { FloatingAction } from "react-native-floating-action";
+import ActionButton from 'react-native-action-button';
+
 
 export const Map = ({ navigation }: { navigation: unknown }) => {
 	return (
@@ -21,6 +24,7 @@ export const Map = ({ navigation }: { navigation: unknown }) => {
 					]}
 				/>
 			</MapView>
+			
 		</View>
 	)
 }
@@ -32,3 +36,4 @@ const styles = StyleSheet.create({
 		width: Dimensions.get('window').width,
 	},
 })
+

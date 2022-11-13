@@ -16,5 +16,16 @@
   "devDependencies": {
     "prettier": "latest",
     "turbo": "latest"
+  },
+  "dependencies": {
+    "@shopify/flash-list": "^1.4.0",
+    "ionicons": "^6.0.4",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-native": "0.69.6",
+    "react-native-action-button": "^2.8.5",
+    "react-native-floating-action": "^1.22.0",
+    "react-native-ionicons": "^4.6.5",
+    "react-native-vector-icons": "^9.2.0"
   }
 }
