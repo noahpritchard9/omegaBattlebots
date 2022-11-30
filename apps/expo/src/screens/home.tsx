@@ -4,6 +4,21 @@ import type { inferProcedureOutput } from '@trpc/server'
 import type { AppRouter } from '@acme/api'
 import { trpc } from '../utils/trpc'
 import React, { useState } from 'react'
+import {
+	useFonts,
+	Roboto_100Thin,
+	Roboto_100Thin_Italic,
+	Roboto_300Light,
+	Roboto_300Light_Italic,
+	Roboto_400Regular,
+	Roboto_400Regular_Italic,
+	Roboto_500Medium,
+	Roboto_500Medium_Italic,
+	Roboto_700Bold,
+	Roboto_700Bold_Italic,
+	Roboto_900Black,
+	Roboto_900Black_Italic,
+  } from '@expo-google-fonts/roboto';
 
 const UserInfo: React.FC<{
 	user: inferProcedureOutput<AppRouter['user']['all']>[number]
@@ -102,11 +117,28 @@ const CreateUser: React.FC = () => {
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
 	const userQuery = trpc.user.all.useQuery()
 	const [showUser, setShowUser] = useState<string | null>(null)
-
+	let [fontsLoaded] = useFonts({
+		Roboto_100Thin,
+    	Roboto_100Thin_Italic,
+    	Roboto_300Light,
+    	Roboto_300Light_Italic,
+    	Roboto_400Regular,
+    	Roboto_400Regular_Italic,
+    	Roboto_500Medium,
+    	Roboto_500Medium_Italic,
+    	Roboto_700Bold,
+    	Roboto_700Bold_Italic,
+    	Roboto_900Black,
+    	Roboto_900Black_Italic,
+	  });
+	
+	  if (!fontsLoaded) {
+		return null;
+	  }
 	return (
 		<SafeAreaView className='flex'>
 			<View className='h-full w-full p-4'>
-				<Text className='text-5xl font-bold mx-auto pb-2'>Journey</Text>
+				<Text style={{ fontFamily: 'Roboto_700Bold', fontSize: 60 }}>Journey</Text>
 				<Pressable
 					onPress={() => navigation.navigate('Profile', { name: showUser })}
 				>
