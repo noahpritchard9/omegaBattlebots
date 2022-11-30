@@ -23,10 +23,11 @@ export const Map = ({ navigation }: { navigation: unknown }) => {
 						{ latitude: 38.897675, longitude: -77.03653 },
 					]}
 				/>
+				
 			</MapView>
-			
 		</View>
 	)
+	
 }
 
 const styles = StyleSheet.create({
