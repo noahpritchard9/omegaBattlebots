@@ -1,9 +1,20 @@
+import { useQuery } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 import { Dimensions, SafeAreaView, StyleSheet, View, Text } from 'react-native'
 import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys'
+
+export interface GoogleLocationResponse {
+	location: Location
+	accuracy: number
+}
+
+export interface Location {
+	lat: number
+	lng: number
+}
 
 const { width, height } = Dimensions.get('window')
 
@@ -18,10 +29,6 @@ const INITIAL_REGION = {
 	longitudeDelta: LONGITUDE_DELTA,
 }
 
-const origin: LatLng = { latitude: 37.79879, longitude: -122.442753 }
-
-const dest: LatLng = { latitude: 37.790651, longitude: -122.422497 }
-
 export const Map = (navigation: { navigation: any }) => {
 	const mapRef = useRef<MapView>(null)
 
@@ -29,6 +36,25 @@ export const Map = (navigation: { navigation: any }) => {
 
 	const [duration, setDuration] = useState<string>('')
 	const [distance, setDistance] = useState<string>('')
+
+	const fetchLocation = async (): Promise<GoogleLocationResponse> =>
+		(
+			await fetch(
+				`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
+			)
+		).json()
+
+	const location = useQuery({
+		queryKey: ['userLocation'],
+		queryFn: fetchLocation,
+	})
+
+	const origin: LatLng = {
+		latitude: location.data?.location.lat ?? 37.79879,
+		longitude: location.data?.location.lng ?? -122.442753,
+	}
+
+	const dest: LatLng = { latitude: 37.790651, longitude: -122.422497 }
 
 	return (
 		<SafeAreaView className='flex items-center justify-center'>
@@ -43,6 +69,16 @@ export const Map = (navigation: { navigation: any }) => {
 				// onRegionChangeComplete={() => {
 				// 	mapRef.current?.animateToRegion(INITIAL_REGION)
 				// }}
+				showsUserLocation
+				onUserLocationChange={e => {
+					setRegion({
+						latitude: e.nativeEvent.coordinate?.latitude!,
+						longitude: e.nativeEvent.coordinate?.longitude!,
+						latitudeDelta: 0.01,
+						longitudeDelta: 0.01,
+					})
+					mapRef.current?.animateToRegion(region)
+				}}
 			>
 				<MapViewDirections
 					origin={origin}
