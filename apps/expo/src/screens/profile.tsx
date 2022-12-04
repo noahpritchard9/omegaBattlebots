@@ -20,10 +20,13 @@ import {
 	Roboto_900Black_Italic,
   } from '@expo-google-fonts/roboto';
 
+  import Slider from '@react-native-community/slider';
+
 
 export const Profile = ({ navigation, route }: { navigation: unknown, route: any }) => {
 	const [message, setMessage] = useState("");
-	
+	const [sliderValue, setSliderValue] = useState(0);
+
 	let [fontsLoaded] = useFonts({
 		Roboto_100Thin,
     	Roboto_100Thin_Italic,
@@ -55,68 +58,154 @@ export const Profile = ({ navigation, route }: { navigation: unknown, route: any
 		
 		<View style={styles.container}>
 			<View style={styles.buttonContainer}>
-                <TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-						Historic Sites
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Local Attractions
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
             <View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Parks/Greenery
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Shady
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Low Elevation Gain
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					High Elevation Gain
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Short (Less than 2 miles)
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity 
-					onPress={() => Alert.alert('Cannot press this one')}> 
-					<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 30 }}>
-					Long (More than 2 miles)
-					</Text>
-				</TouchableOpacity>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
+            </View>
+			<View style={styles.buttonContainer}>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
+            </View>
+			<View style={styles.buttonContainer}>
+			<Text style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}>                         Lit{"\n"}Low             Medium               High</Text>
+			<Slider
+          		style={{width: 200, height: 40}}
+				maximumValue={1}
+          		minimumValue={-1}
+          		minimumTrackTintColor="#307ecc"
+          		maximumTrackTintColor="#000000"
+          		step={1}
+          		value={sliderValue}
+          		onValueChange={
+            		(sliderValue) => setSliderValue(sliderValue)
+          		}
+       		 />
             </View>
    	 	</View>
 		
@@ -149,6 +238,7 @@ const styles = StyleSheet.create({
 	buttonContainer: {
 		//flex: 1,
         //marginBottom: 10,
+		//padding:10,
 		borderColor: 'blue',
 		borderWidth: 1, 
 		borderRadius: 4,
