@@ -4,7 +4,6 @@ import type { inferProcedureOutput } from '@trpc/server';
 import type { AppRouter } from '@acme/api';
 import { trpc } from '../utils/trpc';
 import React, { useState } from 'react';
-import { useFonts, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
 const UserInfo: React.FC<{
 	user: inferProcedureOutput<AppRouter['user']['all']>[number];
@@ -94,13 +93,7 @@ const CreateUser: React.FC = () => {
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
 	const userQuery = trpc.user.all.useQuery();
 	const [showUser, setShowUser] = useState<string | null>(null);
-	let [fontsLoaded] = useFonts({
-		Roboto_700Bold,
-	});
 
-	if (!fontsLoaded) {
-		return null;
-	}
 	return (
 		<SafeAreaView className='flex'>
 			<View className='h-full w-full p-4'>

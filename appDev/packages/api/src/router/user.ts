@@ -24,4 +24,27 @@ export const userRouter = t.router({
 				create: input,
 			});
 		}),
+	update: t.procedure
+		.input(
+			z.object({
+				id: z.string(),
+				distance: z.number().min(-1).max(1),
+				elevation: z.number().min(-1).max(1),
+				lit: z.number().min(-1).max(1),
+				paved: z.number().min(-1).max(1),
+				POI: z.number().min(-1).max(1),
+			})
+		)
+		.mutation(({ ctx, input }) => {
+			return ctx.prisma.user.update({
+				where: { id: input.id },
+				data: {
+					distance: input.distance,
+					elevation: input.elevation,
+					lit: input.lit,
+					paved: input.paved,
+					POI: input.POI,
+				},
+			});
+		}),
 });

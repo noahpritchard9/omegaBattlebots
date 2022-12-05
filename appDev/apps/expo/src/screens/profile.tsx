@@ -1,6 +1,5 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import { useFonts, Roboto_400Regular } from '@expo-google-fonts/roboto';
+import React, { useEffect, useState } from 'react';
 
 import Slider from '@react-native-community/slider';
 import { trpc } from '../utils/trpc';
@@ -12,41 +11,35 @@ export const Profile = ({
 	navigation: unknown;
 	route: any;
 }) => {
-	const [distance, setDistance] = useState(0);
-	const [elevation, setElevation] = useState(0);
-	const [lit, setLit] = useState(0);
-	const [paved, setPaved] = useState(0);
-	const [POI, setPOI] = useState(0);
+	const [name, _] = useState<string>(route.params.name);
 
-	let [fontsLoaded] = useFonts({
-		Roboto_400Regular,
+	const ctx = trpc.useContext();
+
+	const userQuery = trpc.user.byId.useQuery(name);
+
+	const { mutate } = trpc.user.update.useMutation({
+		onMutate: () => {
+			let optimisticUpdate = ctx.user.byId.getData();
+			if (optimisticUpdate) {
+				ctx.user.byId.setData(optimisticUpdate);
+			}
+		},
+		onSettled: () => {
+			ctx.user.byId.invalidate();
+		},
 	});
 
-	if (!fontsLoaded) {
-		return null;
-	}
-
-	const preferencesQuery = trpc.user.byId;
+	const [distance, setDistance] = useState(userQuery.data?.distance ?? 0);
+	const [elevation, setElevation] = useState(userQuery.data?.elevation ?? 0);
+	const [lit, setLit] = useState(userQuery.data?.lit ?? 0);
+	const [paved, setPaved] = useState(userQuery.data?.paved ?? 0);
+	const [POI, setPOI] = useState(userQuery.data?.POI ?? 0);
 
 	return (
-		//<View className='flex items-center justify-center'>
-		//	<Text className='text-4xl mt-4'>Welcome {route.params.name}</Text>
-
-		//	<Button
-		//		title="Press me"
-		//		color="#f194ff"
-		//	/>
-		//</View>
-
 		<SafeAreaView className='w-screen h-screen'>
 			<View className='flex justify-start m-2'>
 				<View className='bg-gray-300 rounded-xl p-2 mb-2'>
-					<Text
-						style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}
-						className='mb-1'
-					>
-						Distance
-					</Text>
+					<Text className='mb-1 text-2xl'>Distance</Text>
 					<View className='flex flex-row items-center justify-between'>
 						<Text>Short</Text>
 						<Text>Medium</Text>
@@ -64,12 +57,7 @@ export const Profile = ({
 					/>
 				</View>
 				<View className='bg-gray-300 rounded-xl p-2 mb-2'>
-					<Text
-						style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}
-						className='mb-1'
-					>
-						Elevation
-					</Text>
+					<Text className='mb-1 text-2xl'>Elevation</Text>
 					<View className='flex flex-row items-center justify-between'>
 						<Text>Lower</Text>
 						<Text>Default</Text>
@@ -87,12 +75,7 @@ export const Profile = ({
 					/>
 				</View>
 				<View className='bg-gray-300 rounded-xl p-2 mb-2'>
-					<Text
-						style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}
-						className='mb-1'
-					>
-						Lit
-					</Text>
+					<Text className='mb-1 text-2xl'>Lit</Text>
 					<View className='flex flex-row items-center justify-between'>
 						<Text>Dark</Text>
 						<Text>Default</Text>
@@ -110,12 +93,7 @@ export const Profile = ({
 					/>
 				</View>
 				<View className='bg-gray-300 rounded-xl p-2 mb-2'>
-					<Text
-						style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}
-						className='mb-1'
-					>
-						Paved
-					</Text>
+					<Text className='mb-1 text-2xl'>Paved</Text>
 					<View className='flex flex-row items-center justify-between'>
 						<Text>No</Text>
 						<Text>Default</Text>
@@ -133,12 +111,7 @@ export const Profile = ({
 					/>
 				</View>
 				<View className='bg-gray-300 rounded-xl p-2'>
-					<Text
-						style={{ fontFamily: 'Roboto_400Regular', fontSize: 20 }}
-						className='mb-1'
-					>
-						POI
-					</Text>
+					<Text className='mb-1 text-2xl'>POI</Text>
 					<View className='flex flex-row items-center justify-between'>
 						<Text>No</Text>
 						<Text>Default</Text>
@@ -156,6 +129,21 @@ export const Profile = ({
 					/>
 				</View>
 			</View>
+			<TouchableOpacity
+				onPress={() =>
+					mutate({
+						id: userQuery.data?.id!,
+						distance: distance,
+						elevation: elevation,
+						lit: lit,
+						paved: paved,
+						POI: POI,
+					})
+				}
+				className='bg-sky-400 py-4 rounded-xl items-center relative bottom-0 m-2'
+			>
+				<Text className='text-xl'>Save Preferences</Text>
+			</TouchableOpacity>
 		</SafeAreaView>
 	);
 };
