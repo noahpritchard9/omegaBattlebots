@@ -1,56 +1,48 @@
-import { SafeAreaView, View, Text, Pressable, TextInput } from 'react-native'
-import { FlashList } from '@shopify/flash-list'
-import type { inferProcedureOutput } from '@trpc/server'
-import type { AppRouter } from '@acme/api'
-import { trpc } from '../utils/trpc'
-import React, { useState } from 'react'
+import { SafeAreaView, View, Text, Pressable, TextInput } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import type { inferProcedureOutput } from '@trpc/server';
+import type { AppRouter } from '@acme/api';
+import { trpc } from '../utils/trpc';
+import React, { useState } from 'react';
+import { useFonts, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
 const UserInfo: React.FC<{
-	user: inferProcedureOutput<AppRouter['user']['all']>[number]
+	user: inferProcedureOutput<AppRouter['user']['all']>[number];
 }> = ({ user }) => {
 	return (
 		<View className='p-4 border-2 border-gray-500 rounded-lg'>
 			<Text className='text-xl font-semibold text-gray-800'>{user.name}</Text>
 			<Text className='text-gray-600'>{user.role}</Text>
 		</View>
-	)
-}
+	);
+};
 
 const CreateUser: React.FC = () => {
-	const utils = trpc.useContext()
+	const utils = trpc.useContext();
 	const { mutate } = trpc.user.create.useMutation({
 		async onSuccess() {
-			await utils.user.all.invalidate()
-			setName('')
-			setAge(0)
-			setEmail('')
-			setPassword('')
+			await utils.user.all.invalidate();
+			setName('');
+			setAge(0);
+			setEmail('');
+			setPassword('');
 		},
 		onError(e) {
-			alert('Please check your input again')
-			console.log('error in mutation', e.message)
+			alert('Please check your input again');
+			console.log('error in mutation', e.message);
 		},
-	})
+	});
 
-	const [name, setName] = useState<string>('')
-	const [email, setEmail] = useState<string>('')
-	const [age, setAge] = useState<number>(0)
-	const [password, setPassword] = useState<string>('')
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [age, setAge] = useState<number>(0);
+	const [password, setPassword] = useState<string>('');
 
 	const onChangeAge = (age: string) => {
-		// let newText = ''
-		// let numbers = '0123456789'
-		// for (let i = 0; i < age.length; i++) {
-		// 	if (numbers.indexOf(age[i]) > -1) {
-		// 		newText += age[i]
-		// 	} else {
-		// 		alert('Age can only be a number')
-		// 	}
-		// }
-		const newAge = age.replace(/\D/g, '')
-		if (newAge.length === 0) alert('Age must be a number')
-		setAge(+newAge)
-	}
+		const newAge = age.replace(/\D/g, '');
+		if (newAge.length === 0) alert('Age must be a number');
+		setAge(+newAge);
+	};
 
 	return (
 		<View className='p-4 border-t-2 border-gray-500 flex flex-col'>
@@ -90,23 +82,31 @@ const CreateUser: React.FC = () => {
 						email,
 						age,
 						password,
-					})
+					});
 				}}
 			>
 				<Text className='text-white font-semibold'>Update user</Text>
 			</Pressable>
 		</View>
-	)
-}
+	);
+};
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
-	const userQuery = trpc.user.all.useQuery()
-	const [showUser, setShowUser] = useState<string | null>(null)
+	const userQuery = trpc.user.all.useQuery();
+	const [showUser, setShowUser] = useState<string | null>(null);
+	let [fontsLoaded] = useFonts({
+		Roboto_700Bold,
+	});
 
+	if (!fontsLoaded) {
+		return null;
+	}
 	return (
 		<SafeAreaView className='flex'>
 			<View className='h-full w-full p-4'>
-				<Text className='text-5xl font-bold mx-auto pb-2'>Journey</Text>
+				<Text style={{ fontFamily: 'Roboto_700Bold', fontSize: 60 }}>
+					Journey
+				</Text>
 				<Pressable
 					onPress={() => navigation.navigate('Profile', { name: showUser })}
 				>
@@ -141,5 +141,5 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 				<CreateUser />
 			</View>
 		</SafeAreaView>
-	)
-}
+	);
+};

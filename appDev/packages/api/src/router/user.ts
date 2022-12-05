@@ -1,12 +1,12 @@
-import { t } from "../trpc";
-import { z } from "zod";
+import { t } from '../trpc';
+import { z } from 'zod';
 
 export const userRouter = t.router({
 	all: t.procedure.query(({ ctx }) => {
-		return ctx.prisma.user.findMany()
+		return ctx.prisma.user.findMany();
 	}),
 	byId: t.procedure.input(z.string()).query(({ ctx, input }) => {
-		return ctx.prisma.user.findFirst({ where: { name: input } })
+		return ctx.prisma.user.findFirst({ where: { name: input } });
 	}),
 	create: t.procedure
 		.input(
@@ -22,6 +22,6 @@ export const userRouter = t.router({
 				where: { email: input.email },
 				update: input,
 				create: input,
-			})
+			});
 		}),
-})
+});
