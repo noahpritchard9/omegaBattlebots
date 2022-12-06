@@ -27,7 +27,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 				<Pressable
 					onPress={() => navigation.navigate('Profile', { name: showUser })}
 				>
-					<Text>Profile</Text>
+					<Text>Profile 1</Text>
 				</Pressable>
 				<Pressable onPress={() => navigation.navigate('Map')}>
 					<Text>Maps</Text>
