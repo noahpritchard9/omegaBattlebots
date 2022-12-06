@@ -16,80 +16,6 @@ const UserInfo: React.FC<{
 	);
 };
 
-const CreateUser: React.FC = () => {
-	const utils = trpc.useContext();
-	const { mutate } = trpc.user.create.useMutation({
-		async onSuccess() {
-			await utils.user.all.invalidate();
-			setName('');
-			setAge(0);
-			setEmail('');
-			setPassword('');
-		},
-		onError(e) {
-			alert('Please check your input again');
-			console.log('error in mutation', e.message);
-		},
-	});
-
-	const [name, setName] = useState<string>('');
-	const [email, setEmail] = useState<string>('');
-	const [age, setAge] = useState<number>(0);
-	const [password, setPassword] = useState<string>('');
-
-	const onChangeAge = (age: string) => {
-		const newAge = age.replace(/\D/g, '');
-		if (newAge.length === 0) alert('Age must be a number');
-		setAge(+newAge);
-	};
-
-	return (
-		<View className='p-4 border-t-2 border-gray-500 flex flex-col'>
-			<TextInput
-				className='border-2 border-gray-500 rounded p-2 mb-2'
-				value={name}
-				onChangeText={setName}
-				placeholder='Name'
-			/>
-			<TextInput
-				keyboardType='number-pad'
-				className='border-2 border-gray-500 rounded p-2 mb-2'
-				value={age > 0 ? age.toString() : ''}
-				onChangeText={newAge => onChangeAge(newAge)}
-				placeholder='Age'
-			/>
-			<TextInput
-				className='border-2 border-gray-500 rounded p-2 mb-2'
-				value={email}
-				onChangeText={setEmail}
-				placeholder='Email'
-				autoCapitalize='none'
-			/>
-			<TextInput
-				className='border-2 border-gray-500 rounded p-2 mb-2'
-				value={password}
-				onChangeText={setPassword}
-				placeholder='Password'
-				autoCapitalize='none'
-				secureTextEntry={true}
-			/>
-			<Pressable
-				className='bg-indigo-500 rounded p-2'
-				onPress={() => {
-					mutate({
-						name,
-						email,
-						age,
-						password,
-					});
-				}}
-			>
-				<Text className='text-white font-semibold'>Update user</Text>
-			</Pressable>
-		</View>
-	);
-};
-
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
 	const userQuery = trpc.user.all.useQuery();
 	const [showUser, setShowUser] = useState<string | null>(null);
@@ -97,9 +23,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 	return (
 		<SafeAreaView className='flex'>
 			<View className='h-full w-full p-4'>
-				<Text style={{ fontFamily: 'Roboto_700Bold', fontSize: 60 }}>
-					Journey
-				</Text>
+				<Text style={{ fontSize: 60 }}>Journey</Text>
 				<Pressable
 					onPress={() => navigation.navigate('Profile', { name: showUser })}
 				>
@@ -130,8 +54,6 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 						</Pressable>
 					)}
 				/>
-
-				<CreateUser />
 			</View>
 		</SafeAreaView>
 	);

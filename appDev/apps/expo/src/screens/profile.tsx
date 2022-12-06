@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Slider from '@react-native-community/slider';
 import { trpc } from '../utils/trpc';
