@@ -8,12 +8,17 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  password String
-  age      Int
-  role     Role   @default(User)
+  id        String @id @default(cuid())
+  name      String
+  email     String @unique
+  password  String
+  age       Int
+  role      Role   @default(User)
+  distance  Int    @default(0)
+  elevation Int    @default(0)
+  lit       Int    @default(0)
+  paved     Int    @default(0)
+  POI       Int    @default(0)
 }
 
 enum Role {
