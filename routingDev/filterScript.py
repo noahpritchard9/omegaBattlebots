@@ -7,6 +7,8 @@ key = 'highway'
 
 val = 'footway'
 
+ouput_name = 'footways'
+
 
 class FootwayCounterHandler(osmium.SimpleHandler):
     def __init__(self):
@@ -49,7 +51,7 @@ if __name__ == '__main__':
     NodesCollect().apply_file("dc.osm")
 
     #name the output file
-    writer = osmium.SimpleWriter("footways.osm")
+    writer = osmium.SimpleWriter(ouput_name)
 
 
     HighwayFilter().apply_file("dc.osm")
