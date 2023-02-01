@@ -124,7 +124,7 @@ else:
             
             #this part handles the scoring added:
             #Scoring is: 
-            r[1] += ((r[0]-startDist)/(length)) * 100
+            r[1] += abs((((r[0]-startDist)/(length)) * 5) - 5)
         except TypeError:
             print('Did not return shortest path')
         #r[0] += nx.shortest_path_length(footwaysSimplified, r[2], r[-1], weight='length')
