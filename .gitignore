@@ -37,6 +37,9 @@ yarn-error.log*
 .env
 .env*.local
 
+# api keys
+apiKeys.ts
+
 # vercel
 .vercel
 
