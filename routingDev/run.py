@@ -20,6 +20,13 @@ locData = communication().getLoc()
 
 prefData = communication().getPref()
 
+elevation = 0
+PoI = 1
+paved = 1
+lit = 1
+distance = -1
+prefData = [elevation, PoI, paved, lit, distance]
+
 elevation = prefData[0]
 PoI = prefData[1]
 paved = prefData[2]
@@ -108,7 +115,7 @@ else:
     #narrow down space
     routes.sort(key=lambda x: x[1])
     routes = routes[round(.75 * len(routes)) : ]
-    print(len(routes))
+
     # now let's make the route circular in a simple form
     # This will also allow us to evaluate the distance in a simple manner
     for r in routes:
@@ -119,7 +126,7 @@ else:
                 r[0] += footwaysSimplified[short[i]][short[i+1]][0]['length']
 
             if len(short) > 1:
-                for n in short[1:-1]:
+                for n in short[1:]:
                     r.append(n)
             
             #this part handles the scoring added:
@@ -128,17 +135,21 @@ else:
         except TypeError:
             print('Did not return shortest path')
         #r[0] += nx.shortest_path_length(footwaysSimplified, r[2], r[-1], weight='length')
-    print(len(routes))
+
     finalRoutes = []
     for r in routes:
         if r[0] >= length*1.5:
             finalRoutes.append(r)
     finalRoutes.sort(key=lambda x: x[1])
     finalRoutes = finalRoutes[round(.75 * len(finalRoutes)) : ]
-    print(len(finalRoutes))
 
     visualize.showBest(tuple(finalRoutes), footwaysSimplified, locData)
 
     #Send the data back to the API
 
-    
+    returnRoute = []
+    for i in range(2, len(finalRoutes[-1])):
+        returnRoute.append([footwaysSimplified.nodes[finalRoutes[-1][i]]['y'], footwaysSimplified.nodes[finalRoutes[-1][i]]['x']])
+    obj = [{'lat': x, 'lon': y} for [x, y] in returnRoute]
+    json = {'route': obj}
+    communication().postRoute(json)
