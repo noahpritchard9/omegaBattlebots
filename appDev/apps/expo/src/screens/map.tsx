@@ -6,6 +6,8 @@ import MapViewDirections from 'react-native-maps-directions';
 
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
 
+const URL = 'http://10.0.0.7:8080';
+
 export interface GoogleLocationResponse {
 	location: Location;
 	accuracy: number;
@@ -37,22 +39,44 @@ export const Map = (navigation: { navigation: any }) => {
 	const [duration, setDuration] = useState<string>('');
 	const [distance, setDistance] = useState<string>('');
 
-	// const fetchLocation = async (): Promise<GoogleLocationResponse> =>
-	// 	(
-	// 		await fetch(
-	// 			`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
-	// 		)
-	// 	).json()
+	const fetchLocation = async (): Promise<GoogleLocationResponse> =>
+		(
+			await fetch(
+				`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
+			)
+		).json();
 
-	// const location = useQuery({
+	// const userLocationQuery = useQuery({
 	// 	queryKey: ['userLocation'],
 	// 	queryFn: fetchLocation,
-	// })
+	// });
 
-	// const origin: LatLng = {
-	// 	latitude: location.data?.location.lat ?? 37.79879,
-	// 	longitude: location.data?.location.lng ?? -122.442753,
-	// }
+	// const userLocation: LatLng = {
+	// 	latitude: userLocationQuery.data?.location.lat ?? 37.79879,
+	// 	longitude: userLocationQuery.data?.location.lng ?? -122.442753,
+	// };
+
+	// const sendUserLocation = () => {
+	// 	fetch(`${URL}/user`, {
+	// 		method: 'POST',
+	// 		body: JSON.stringify(userLocationQuery.data),
+	// 	});
+	// };
+
+	const fetchFinalRoute = async () => {
+		try {
+			const res = await fetch(`${URL}/route`);
+			return res.json() as Promise<LatLng[]>;
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const finalRouteQuery = useQuery({
+		queryKey: ['finalRoute'],
+		queryFn: fetchFinalRoute,
+		// enabled: !!userLocationQuery.data,
+	});
 
 	const origin: LatLng = {
 		latitude: 37.79879,
@@ -60,6 +84,42 @@ export const Map = (navigation: { navigation: any }) => {
 	};
 
 	const dest: LatLng = { latitude: 37.790651, longitude: -122.422497 };
+
+	// if (userLocationQuery.isLoading) {
+	// 	return (
+	// 		<SafeAreaView>
+	// 			<Text>Loading user location data</Text>
+	// 		</SafeAreaView>
+	// 	);
+	// }
+
+	// if (userLocationQuery.isError) {
+	// 	return (
+	// 		<SafeAreaView>
+	// 			<Text>
+	// 				Error getting user location data, {(userLocationQuery.error as Error).message}
+	// 			</Text>
+	// 		</SafeAreaView>
+	// 	);
+	// }
+
+	if (finalRouteQuery.isLoading) {
+		return (
+			<SafeAreaView>
+				<Text>Loading route data</Text>
+			</SafeAreaView>
+		);
+	}
+
+	if (finalRouteQuery.isError) {
+		return (
+			<SafeAreaView>
+				<Text>
+					Error getting route data, {(finalRouteQuery.error as Error).message}
+				</Text>
+			</SafeAreaView>
+		);
+	}
 
 	return (
 		<SafeAreaView className='flex items-center justify-center'>
@@ -85,25 +145,33 @@ export const Map = (navigation: { navigation: any }) => {
 					mapRef.current?.animateToRegion(region);
 				}}
 			>
-				<MapViewDirections
-					origin={origin}
-					destination={dest}
-					apikey={GOOGLE_MAPS_API_KEY}
-					strokeWidth={3}
-					strokeColor='hotpink'
-					onReady={res => {
-						setDuration(res.duration.toFixed(0));
-						setDistance(res.distance.toFixed(1));
-						mapRef.current?.fitToCoordinates(res.coordinates, {
-							edgePadding: {
-								top: height / 20,
-								right: width / 20,
-								bottom: height / 20,
-								left: width / 20,
-							},
-						});
-					}}
-				></MapViewDirections>
+				{finalRouteQuery.data !== undefined ? (
+					<MapViewDirections
+						origin={finalRouteQuery.data[0] ?? origin}
+						destination={finalRouteQuery.data.at(-1) ?? dest}
+						waypoints={finalRouteQuery.data.slice(1, -2)}
+						apikey={GOOGLE_MAPS_API_KEY}
+						strokeWidth={3}
+						strokeColor='hotpink'
+						onStart={s => console.log(s)}
+						onError={e => console.error(e)}
+						onReady={res => {
+							console.log(res);
+							setDuration(res.duration.toFixed(0));
+							setDistance(res.distance.toFixed(1));
+							mapRef.current?.fitToCoordinates(res.coordinates, {
+								edgePadding: {
+									top: height / 20,
+									right: width / 20,
+									bottom: height / 20,
+									left: width / 20,
+								},
+							});
+						}}
+					></MapViewDirections>
+				) : (
+					<Text>{JSON.stringify(finalRouteQuery)}</Text>
+				)}
 			</MapView>
 			{duration && (
 				<Text className='absolute top-0 right-0 m-2 font-bold'>
