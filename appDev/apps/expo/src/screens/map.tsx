@@ -63,13 +63,33 @@ export const Map = (navigation: { navigation: any }) => {
 	// 	});
 	// };
 
+	// const fetchFinalRoute = async () => {
+	// 	try {
+	// 		const res = await fetch(`${URL}/route`);
+	// 		return res.json() as Promise<LatLng[]>;
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
+
+	const preferences = {
+		elevation: 0,
+		PoI: 1,
+		paved: 1,
+		lit: 1,
+		distance: -1,
+	};
+
 	const fetchFinalRoute = async () => {
-		try {
-			const res = await fetch(`${URL}/route`);
-			return res.json() as Promise<LatLng[]>;
-		} catch (e) {
-			console.log(e);
-		}
+		const res = await fetch(`${URL}/route`, {
+			headers: {
+				"Accept": 'application/json',
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify({ location: origin, preferences: preferences }),
+		});
+		return res.json();
 	};
 
 	const finalRouteQuery = useQuery({
@@ -147,9 +167,9 @@ export const Map = (navigation: { navigation: any }) => {
 			>
 				{finalRouteQuery.data !== undefined ? (
 					<MapViewDirections
-						origin={finalRouteQuery.data[0] ?? origin}
-						destination={finalRouteQuery.data.at(-1) ?? dest}
-						waypoints={finalRouteQuery.data.slice(1, -2)}
+						origin={finalRouteQuery.data.route[0] ?? origin}
+						destination={finalRouteQuery.data.route.at(-1) ?? dest}
+						waypoints={finalRouteQuery.data.route.slice(1, 24)}
 						apikey={GOOGLE_MAPS_API_KEY}
 						strokeWidth={3}
 						strokeColor='hotpink'
