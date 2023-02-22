@@ -5,8 +5,9 @@ import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
+import { trpc } from '../utils/trpc';
 
-const URL = 'http://128.164.192.77:8080/';
+const URL = 'http://128.164.192.77:8080';
 
 export interface GoogleLocationResponse {
 	location: Location;
@@ -31,8 +32,12 @@ const INITIAL_REGION = {
 	longitudeDelta: LONGITUDE_DELTA,
 };
 
-export const Map = (navigation: { navigation: any }) => {
+export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	const mapRef = useRef<MapView>(null);
+
+	const [name, _] = useState<string>(route.params.name);
+
+	const userQuery = trpc.user.byId.useQuery(name);
 
 	const [region, setRegion] = useState<Region>(INITIAL_REGION);
 
@@ -73,11 +78,11 @@ export const Map = (navigation: { navigation: any }) => {
 	// };
 
 	const preferences = {
-		elevation: 0,
-		PoI: 1,
-		paved: 1,
-		lit: 1,
-		distance: -1,
+		elevation: userQuery.data?.elevation,
+		PoI: userQuery.data?.POI,
+		paved: userQuery.data?.paved,
+		lit: userQuery.data?.lit,
+		distance: userQuery.data?.distance,
 	};
 
 	const fetchFinalRoute = async () => {
@@ -99,8 +104,10 @@ export const Map = (navigation: { navigation: any }) => {
 	});
 
 	const origin: LatLng = {
-		latitude: 38.89963,
-		longitude: -77.0489,
+		// latitude: 38.89963,
+		// longitude: -77.0489,
+		latitude: 38.899176,
+		longitude: -77.047092,
 	};
 
 	const dest: LatLng = { latitude: 38.89963, longitude: -77.0489 };
@@ -149,6 +156,7 @@ export const Map = (navigation: { navigation: any }) => {
 				style={styles.map}
 				initialRegion={region}
 				// region={region}
+				// this could be causing issue with scrolling w using old region
 				onRegionChange={r => setRegion(r)}
 				// region={INITIAL_REGION}
 				// onRegionChangeComplete={() => {
@@ -173,7 +181,6 @@ export const Map = (navigation: { navigation: any }) => {
 						apikey={GOOGLE_MAPS_API_KEY}
 						mode='WALKING'
 						splitWaypoints={true}
-						optimizeWaypoints={true}
 						strokeWidth={3}
 						strokeColor='hotpink'
 						onStart={s => console.log(s)}
