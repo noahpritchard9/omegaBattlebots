@@ -6,7 +6,7 @@ import MapViewDirections from 'react-native-maps-directions';
 
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
 
-const URL = 'http://10.0.0.7:8080';
+const URL = 'http://128.164.192.77:8080/';
 
 export interface GoogleLocationResponse {
 	location: Location;
@@ -83,7 +83,7 @@ export const Map = (navigation: { navigation: any }) => {
 	const fetchFinalRoute = async () => {
 		const res = await fetch(`${URL}/route`, {
 			headers: {
-				"Accept": 'application/json',
+				Accept: 'application/json',
 				'Content-Type': 'application/json',
 			},
 			method: 'POST',
@@ -99,11 +99,11 @@ export const Map = (navigation: { navigation: any }) => {
 	});
 
 	const origin: LatLng = {
-		latitude: 37.79879,
-		longitude: -122.442753,
+		latitude: 38.89963,
+		longitude: -77.0489,
 	};
 
-	const dest: LatLng = { latitude: 37.790651, longitude: -122.422497 };
+	const dest: LatLng = { latitude: 38.89963, longitude: -77.0489 };
 
 	// if (userLocationQuery.isLoading) {
 	// 	return (
@@ -171,6 +171,9 @@ export const Map = (navigation: { navigation: any }) => {
 						destination={finalRouteQuery.data.route.at(-1) ?? dest}
 						waypoints={finalRouteQuery.data.route.slice(1, 24)}
 						apikey={GOOGLE_MAPS_API_KEY}
+						mode='WALKING'
+						splitWaypoints={true}
+						optimizeWaypoints={true}
 						strokeWidth={3}
 						strokeColor='hotpink'
 						onStart={s => console.log(s)}
