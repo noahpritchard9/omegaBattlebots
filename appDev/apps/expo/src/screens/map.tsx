@@ -1,6 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import {
+	Dimensions,
+	SafeAreaView,
+	StyleSheet,
+	View,
+	Image,
+	Text,
+	ActivityIndicator,
+} from 'react-native';
 import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
@@ -132,8 +140,12 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 
 	if (finalRouteQuery.isLoading) {
 		return (
-			<SafeAreaView>
-				<Text>Loading route data</Text>
+			<SafeAreaView className='flex items-center justify-center h-screen -m-24 bg-sky-100'>
+				<Image
+					source={require('../../assets/bird.gif')}
+					className='h-80 w-80'
+				/>
+				<Text className='m-2'>This may take a minute</Text>
 			</SafeAreaView>
 		);
 	}
@@ -157,7 +169,7 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 				initialRegion={region}
 				// region={region}
 				// this could be causing issue with scrolling w using old region
-				onRegionChange={r => setRegion(r)}
+				onRegionChange={setRegion}
 				// region={INITIAL_REGION}
 				// onRegionChangeComplete={() => {
 				// 	mapRef.current?.animateToRegion(INITIAL_REGION)
