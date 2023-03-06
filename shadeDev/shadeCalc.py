@@ -35,10 +35,9 @@ class shadowCalc():
         driver = webdriver.Chrome(options=chrome_options)
         # driver = webdriver.Chrome(ChromeDriverManager().install())
 
-        url = 'https://www.suncalc.org/#/{la},{lo},17/null/09:30/{h}/2'
+        url = 'https://www.suncalc.org/#/{la},{lo},17/null/08:30/{h}/2'
         driver.get(url.format(la=build_lat, lo = build_long, h = build_height))
-        # time.sleep(30)
-
+        time.sleep(30)
         elem = float(driver.find_element(By.ID, "schatten").text)
         print("shadow length:",elem)
         driver.close()
@@ -49,11 +48,32 @@ class shadowCalc():
             return 1
         else:
             print("Shady path?: NO")
+            return 0
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #----------------calc
     def height(self, build_lat, build_long):
         if build_lat == 38.900595794515404 and build_long == -77.04650672345407:
             return 39.23
-        if build_lat == 38.899460294503704 and build_long == -77.04651482482335:
+        if build_lat == 38.89990433333333 and build_long == -77.04541256666667:
             return 25.98
         if build_lat == 38.899102660183694 and build_long == -77.04518617678218:
             return 28.17
@@ -63,39 +83,4 @@ class shadowCalc():
         else: 
             return 0
         
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#input 3/4 lat long sidewalk lat long
-#need building height, lat and long
-# 130 feet (39.624) (commercial streets) and 
-# 90 feet (27.432) (residential streets), and 
-# 160 feet (48.768)for parts of Pennsylvania Avenue, NW.
-# if between is N
-# so check buldings north
-#  else
-#  
-# 
-# what if we get azimuth depending on time and check buildings down that line . 
-#import function create object
-# show suncalc
-# 1 connect scripts
-# work back
-# height
-# writing2
-# create method shade calc and call inside for loop``.
-# ask about height
 
