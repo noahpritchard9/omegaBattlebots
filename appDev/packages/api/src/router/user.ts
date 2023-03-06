@@ -29,7 +29,7 @@ export const userRouter = t.router({
 			z.object({
 				id: z.string(),
 				distance: z.number().min(-1).max(1),
-				elevation: z.number().min(-1).max(1),
+				shade: z.number().min(-1).max(1),
 				lit: z.number().min(-1).max(1),
 				paved: z.number().min(-1).max(1),
 				POI: z.number().min(-1).max(1),
@@ -40,7 +40,7 @@ export const userRouter = t.router({
 				where: { id: input.id },
 				data: {
 					distance: input.distance,
-					elevation: input.elevation,
+					shade: input.shade,
 					lit: input.lit,
 					paved: input.paved,
 					POI: input.POI,

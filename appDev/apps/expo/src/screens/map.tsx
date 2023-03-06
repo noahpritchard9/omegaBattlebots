@@ -4,10 +4,8 @@ import {
 	Dimensions,
 	SafeAreaView,
 	StyleSheet,
-	View,
 	Image,
 	Text,
-	ActivityIndicator,
 } from 'react-native';
 import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
@@ -86,7 +84,7 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	// };
 
 	const preferences = {
-		elevation: userQuery.data?.elevation,
+		shade: userQuery.data?.shade,
 		PoI: userQuery.data?.POI,
 		paved: userQuery.data?.paved,
 		lit: userQuery.data?.lit,
