@@ -1,5 +1,7 @@
 import osmium 
 
+### THE FOLLOWING GETS OUR TAGS/ATTRIBUTES ONTO OUR WALKING MAP ###
+
 class UpdateMap(osmium.SimpleHandler):
     
     def __init__(self, footwaysSimplified):
@@ -30,6 +32,6 @@ class UpdateMap(osmium.SimpleHandler):
             if x.type == 'n' and x.ref in self.footwaysSimplified:
                 for tag in r.tags:
                     self.footwaysSimplified.nodes[x.ref][tag.k] = tag.v
-                
-            # if x.type == 'w':
-            #     self.ways.append([x.ref, r])
+
+    
+                            
