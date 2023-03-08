@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import math
 import time
+import requests
+
 
 class shadowCalc():
     def __init__(self, path_lat, path_long, build_lat, build_long):
@@ -15,7 +17,6 @@ class shadowCalc():
 
     def shade(self, path_lat, path_long, build_lat, build_long):
         
-        #will get height from elevation map 
         build_height = shadowCalc.height(self, build_lat,build_long)
         
         #Harversine Formula to get distance between the two points
@@ -34,12 +35,15 @@ class shadowCalc():
         chrome_options.add_argument("headless")
         driver = webdriver.Chrome(options=chrome_options)
         # driver = webdriver.Chrome(ChromeDriverManager().install())
+        
+        
 
         url = 'https://www.suncalc.org/#/{la},{lo},17/null/08:30/{h}/2'
         driver.get(url.format(la=build_lat, lo = build_long, h = build_height))
-        time.sleep(30)
+        # time.sleep(30)
         elem = float(driver.find_element(By.ID, "schatten").text)
         print("shadow length:",elem)
+        print("height :",build_height)
         driver.close()
 
         #does building shadow reach path point?
@@ -50,37 +54,31 @@ class shadowCalc():
             print("Shady path?: NO")
             return 0
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    #----------------calc
     def height(self, build_lat, build_long):
-        if build_lat == 38.900595794515404 and build_long == -77.04650672345407:
-            return 39.23
-        if build_lat == 38.89990433333333 and build_long == -77.04541256666667:
-            return 25.98
-        if build_lat == 38.899102660183694 and build_long == -77.04518617678218:
-            return 28.17
-        
-        if build_lat == 38.8993785861396 and build_long == -77.04460756230469:
-            return 50.41
-        else: 
+        url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+        params = {
+            'location': '{},{}'.format(build_lat, build_long),
+            'radius': 3,
+            'type': 'building',
+            'key': 'AIzaSyCiMraK7ZuO-eaRLSekK_9Ag-1sa30KGZ4'
+        }
+        response = requests.get(url, params=params)
+        results = response.json()['results']
+        if results:
+            print("Building found at specified location.")
+            print(results)
+            first_building = results[0]
+            height = first_building.get("height")
+            print("height", height)
+            # if height 
+            return height
+        else:
+            print("No building found at specified location.")
             return 0
-        
+
+
+
+      
 
