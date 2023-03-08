@@ -53,7 +53,7 @@ class Route(Resource):
         locData = [user_location['latitude'], user_location['longitude']]
 
         user_preferences = data['preferences']
-        prefData = [user_preferences['elevation'], user_preferences['PoI'], user_preferences['paved'], user_preferences['lit'], user_preferences['distance']]
+        prefData = [user_preferences['shade'], user_preferences['PoI'], user_preferences['paved'], user_preferences['lit'], user_preferences['distance']]
         return run.run(locData, prefData, footwaysSimplified)
 
     #posts route to api
@@ -72,4 +72,4 @@ api.add_resource(Route, "/route")
 if (__name__) == "__main__":
     #Here we have setup, dependent on whether we really need it or not
     footwaysSimplified = setup().completeSetup("dc.osm", "finalSimplified.osm")
-    app.run(debug=True, port=8080, host="0.0.0.0")
+    app.run(debug=True, port=9090, host="0.0.0.0")

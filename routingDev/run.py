@@ -22,7 +22,7 @@ class run:
         distance = -1
         #prefData = [elevation, PoI, paved, lit, distance]
 
-        elevation = prefData[0]
+        shade = prefData[0]
         PoI = prefData[1]
         paved = prefData[2]
         lit = prefData[3]
@@ -55,7 +55,7 @@ class run:
             i = 0
             iter = 0
             #while loop to tell us what percentage of routes we want to be over the threshold
-            while i < len(routes) / 100 and i < 100:
+            while i < len(routes) / 100 and i < 1000:
                 tempRoutes = []
                 #reset i to account for routes this run past distance
                 i = 0
@@ -128,7 +128,7 @@ class run:
             finalRoutes.sort(key=lambda x: x[1])
             finalRoutes = finalRoutes[round(.75 * len(finalRoutes)) : ]
 
-            visualize.showBest(tuple(finalRoutes), footwaysSimplified, locData)
+            #visualize.showBest(tuple(finalRoutes), footwaysSimplified, locData)
 
             #Send the data back to the API
 
