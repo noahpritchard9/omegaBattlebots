@@ -13,7 +13,6 @@ import time
 class setup():
     #runs all necessary setup functions
     def completeSetup(self, data, file):
-        self.getBuildings()
         self.footwaysSimplified = self.createFootwaysSimplified(file)
         self.addTags(data, self.footwaysSimplified)
         return self.footwaysSimplified
@@ -32,13 +31,15 @@ class setup():
         start = timeit.timeit()
         try:
             for node in map.nodes:
+                print(map.nodes[node])
+                #footwaysSimplified.nodes[n.ref][tag.k] = tag.v
                 if i % 6000 == 0:
                     end = timeit.timeit()
                     if end-start < 60:
                         time.sleep(60 - (end-start))
                         start = timeit.timeit()
-                latitude = node['y']
-                longitude = node['x']
+                latitude = map.nodes[node]['y']
+                longitude = map.nodes[node]['x']
                 b = buildings(latitude, longitude)
                 shade = b.shade(latitude, longitude)
                 node[node.id]['shade'] = shade
