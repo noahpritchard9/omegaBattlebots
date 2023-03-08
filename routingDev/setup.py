@@ -4,6 +4,10 @@ import pandas as pd
 import csv
 import networkx as nx
 from buildingsCalc import buildings
+import sys
+import timeit
+import time
+
 
 
 class setup():
@@ -24,12 +28,28 @@ class setup():
         UpdateMap(map).apply_file(data)
         
         #now we add shade tags:
-        for node in map.nodes:
-            latitude = node['y']
-            longitude = node['x']
-            b = buildings(latitude, longitude)
-            shade = b.shade(latitude, longitude)
-            node[node.id]['shade'] = shade
+        i = 1
+        start = timeit.timeit()
+        try:
+            for node in map.nodes:
+                if i % 6000 == 0:
+                    end = timeit.timeit()
+                    if end-start < 60:
+                        time.sleep(60 - (end-start))
+                        start = timeit.timeit()
+                latitude = node['y']
+                longitude = node['x']
+                b = buildings(latitude, longitude)
+                shade = b.shade(latitude, longitude)
+                node[node.id]['shade'] = shade
+                print(shade)
+        except KeyboardInterrupt:
+            ox.save_graph_xml(map, filepath="shade.osm")
+            ox.save_graphml(map, filepath='shade.graphml')
+            ox.save_graph_geopackage(map, filepath='shade.gpkg')
+
+            print('Interrupted')
+            sys.exit(0)
 
 
 
