@@ -39,13 +39,6 @@ class buildings():
 
         retVal = "NO"
         count = 1
-        # url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-        # params = {
-        #     'location': '{},{}'.format(build_lat, build_long),
-        #     'radius': 5,
-        #     'type': 'building',
-        #     'key': 'YOUR_API_KEY'
-        # }
 
         # iterate through buildings down the line of the shadow
         for i in range(10,130,15):

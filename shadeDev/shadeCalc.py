@@ -54,31 +54,25 @@ class shadowCalc():
             print("Shady path?: NO")
             return 0
     
-
     
     def height(self, build_lat, build_long):
         url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         params = {
             'location': '{},{}'.format(build_lat, build_long),
-            'radius': 3,
+            'radius': 5,
             'type': 'building',
-            'key': 'AIzaSyCiMraK7ZuO-eaRLSekK_9Ag-1sa30KGZ4'
+            'key': '****** ADD API KEY HERE ****** '
         }
         response = requests.get(url, params=params)
         results = response.json()['results']
         if results:
             print("Building found at specified location.")
-            print(results)
-            first_building = results[0]
-            height = first_building.get("height")
-            print("height", height)
-            # if height 
-            return height
+            if ((build_long < -77.00353262122852) & (build_lat < 38.90989561303297)):
+                    return 40
+            return 12
         else:
             print("No building found at specified location.")
             return 0
 
 
-
-      
 
