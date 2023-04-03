@@ -1,5 +1,6 @@
 import osmnx as ox
 from osmiumUpdates import UpdateMap
+from osmiumUpdates import UpdateMap2
 import pandas as pd
 import csv
 import networkx as nx
@@ -14,7 +15,8 @@ class setup():
     #runs all necessary setup functions
     def completeSetup(self, data, file):
         self.footwaysSimplified = self.createFootwaysSimplified(file)
-        self.addTags(data, self.footwaysSimplified)
+        self.dc = self.createFootwaysSimplified('dc.osm')
+        self.addTags(data, self.footwaysSimplified, self.dc)
         return self.footwaysSimplified
 
 
@@ -23,34 +25,37 @@ class setup():
         return ox.graph_from_xml(file)
 
     #adds tags to the file from our data file
-    def addTags(self, data, map):
+    def addTags(self, data, map, dc):
         UpdateMap(map).apply_file(data)
+
+        #now let's add points of interest
+        UpdateMap2(map, dc).apply_file('PoI.osm')
         
         #now we add shade tags:
-        i = 1
-        start = timeit.timeit()
-        try:
-            for node in map.nodes:
-                print(map.nodes[node])
-                #footwaysSimplified.nodes[n.ref][tag.k] = tag.v
-                if i % 6000 == 0:
-                    end = timeit.timeit()
-                    if end-start < 60:
-                        time.sleep(60 - (end-start))
-                        start = timeit.timeit()
-                latitude = map.nodes[node]['y']
-                longitude = map.nodes[node]['x']
-                b = buildings(latitude, longitude)
-                shade = b.shade(latitude, longitude)
-                node[node.id]['shade'] = shade
-                print(shade)
-        except KeyboardInterrupt:
-            ox.save_graph_xml(map, filepath="shade.osm")
-            ox.save_graphml(map, filepath='shade.graphml')
-            ox.save_graph_geopackage(map, filepath='shade.gpkg')
+        # i = 1
+        # start = timeit.timeit()
+        # try:
+        #     for node in map.nodes:
+        #         print(map.nodes[node])
+        #         #footwaysSimplified.nodes[n.ref][tag.k] = tag.v
+        #         if i % 6000 == 0:
+        #             end = timeit.timeit()
+        #             if end-start < 60:
+        #                 time.sleep(60 - (end-start))
+        #                 start = timeit.timeit()
+        #         latitude = map.nodes[node]['y']
+        #         longitude = map.nodes[node]['x']
+        #         b = buildings(latitude, longitude)
+        #         shade = b.shade(latitude, longitude)
+        #         shade = shade.lower()
+        #         node[node.id]['shade'] = shade
+        # except KeyboardInterrupt:
+        #     ox.save_graph_xml(map, filepath="shade.osm")
+        #     ox.save_graphml(map, filepath='shade.graphml')
+        #     ox.save_graph_geopackage(map, filepath='shade.gpkg')
 
-            print('Interrupted')
-            sys.exit(0)
+        #     print('Interrupted')
+        #     sys.exit(0)
 
 
 

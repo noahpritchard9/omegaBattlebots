@@ -1,4 +1,5 @@
 import osmium 
+import osmnx as ox
 
 ### THE FOLLOWING GETS OUR TAGS/ATTRIBUTES ONTO OUR WALKING MAP ###
 
@@ -33,5 +34,20 @@ class UpdateMap(osmium.SimpleHandler):
                 for tag in r.tags:
                     self.footwaysSimplified.nodes[x.ref][tag.k] = tag.v
 
+
+
+
+# Adds points of interest
+class UpdateMap2(osmium.SimpleHandler):
+    
+    def __init__(self, footwaysSimplified, dc):
+        super(UpdateMap2, self).__init__()
+        self.footwaysSimplified = footwaysSimplified
+        self.dc = dc
+    
+    def way(self, w):
+        node = ox.distance.nearest_nodes(self.footwaysSimplified, self.dc.nodes[w.nodes[0]]['y'], self.dc.nodes[w.nodes[0]]['x'])
+        self.footwaysSimplified.nodes[node]['PoI'] = 'yes'
+                    
     
                             

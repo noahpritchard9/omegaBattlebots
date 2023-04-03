@@ -15,18 +15,19 @@ import json
 class run:
     def run(locData, prefData, footwaysSimplified):
         #Get user Location and Preferences
-        elevation = 0
+        shade = 0
         PoI = 1
         paved = 1
         lit = 1
         distance = -1
         #prefData = [elevation, PoI, paved, lit, distance]
 
-        elevation = prefData[0]
+        shade = prefData[0]
         PoI = prefData[1]
         paved = prefData[2]
         lit = prefData[3]
         distance = prefData[4]
+        elevation = 0
 
         #Here's our walking map which simplifies the map to just the walking paths
         #dist is set by preferences:
@@ -79,7 +80,9 @@ class run:
                             score().score(lit, "lit", "yes", nbr, tempRoutes, footwaysSimplified)
                             
                             score().score(paved, "paved", "yes", nbr, tempRoutes, footwaysSimplified)                                    
-                                
+
+                            score().score(paved, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
+
                             tempRoutes[-1].append(nbr)
                             
                             #add in distance
