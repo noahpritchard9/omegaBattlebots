@@ -1,14 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
-    Dimensions,
-    SafeAreaView,
-    StyleSheet,
-    Image,
-    Text,
+	Dimensions,
+	SafeAreaView,
+	StyleSheet,
+	Image,
+	Text,
+	View,
 } from 'react-native';
-import MapView, { LatLng, PROVIDER_GOOGLE, Region } from 'react-native-maps';
-import MapViewDirections from 'react-native-maps-directions';
+import MapView, {
+	LatLng,
+	Marker,
+	PROVIDER_GOOGLE,
+	Region,
+} from 'react-native-maps';
+import MapViewDirections, {
+	MapDirectionsResponse,
+} from 'react-native-maps-directions';
 
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
 import { trpc } from '../utils/trpc';
@@ -16,13 +24,13 @@ import { trpc } from '../utils/trpc';
 const URL = 'http://161.253.78.224:9090';
 
 export interface GoogleLocationResponse {
-    location: Location;
-    accuracy: number;
+	location: Location;
+	accuracy: number;
 }
 
 export interface Location {
-    lat: number;
-    lng: number;
+	lat: number;
+	lng: number;
 }
 
 const { width, height } = Dimensions.get('window');
@@ -32,209 +40,250 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const INITIAL_REGION = {
-    latitude: 38.9007,
-    longitude: 77.0518,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA,
+	latitude: 38.9007,
+	longitude: 77.0518,
+	latitudeDelta: LATITUDE_DELTA,
+	longitudeDelta: LONGITUDE_DELTA,
 };
 
 export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
-    const mapRef = useRef<MapView>(null);
+	const mapRef = useRef<MapView>(null);
 
-    const [name, _] = useState<string>(route.params.name);
+	const [name, _] = useState<string>(route.params.name);
 
-    const userQuery = trpc.user.byId.useQuery(name);
+	const userQuery = trpc.user.byId.useQuery(name);
 
-    const [region, setRegion] = useState<Region>(INITIAL_REGION);
+	const [region, setRegion] = useState<Region>(INITIAL_REGION);
 
-    const [duration, setDuration] = useState<string>('');
-    const [distance, setDistance] = useState<string>('');
+	const [currentRoute, setCurrentRoute] = useState<MapDirectionsResponse>();
+	const [currentStep, setCurrentStep] = useState('');
 
-    // const fetchLocation = async (): Promise<GoogleLocationResponse> =>
-    //	(
-    //		await fetch(
-    //			`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
-    //		)
-    //	).json();
+	const [duration, setDuration] = useState<string>('');
+	const [distance, setDistance] = useState<string>('');
 
-    // const userLocationQuery = useQuery({
-    // 	queryKey: ['userLocation'],
-    // 	queryFn: fetchLocation,
-    // });
+	const [trees, setTrees] = useState<number[]>([]);
 
-    // const userLocation: LatLng = {
-    // 	latitude: userLocationQuery.data?.location.lat ?? 37.79879,
-    // 	longitude: userLocationQuery.data?.location.lng ?? -122.442753,
-    // };
+	// const fetchLocation = async (): Promise<GoogleLocationResponse> =>
+	//	(
+	//		await fetch(
+	//			`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
+	//		)
+	//	).json();
 
-    // const sendUserLocation = () => {
-    // 	fetch(`${URL}/user`, {
-    // 		method: 'POST',
-    // 		body: JSON.stringify(userLocationQuery.data),
-    // 	});
-    // };
+	// const userLocationQuery = useQuery({
+	// 	queryKey: ['userLocation'],
+	// 	queryFn: fetchLocation,
+	// });
 
-    // const fetchFinalRoute = async () => {
-    // 	try {
-    // 		const res = await fetch(`${URL}/route`);
-    // 		return res.json() as Promise<LatLng[]>;
-    // 	} catch (e) {
-    // 		console.log(e);
-    // 	}
-    // };
+	// const userLocation: LatLng = {
+	// 	latitude: userLocationQuery.data?.location.lat ?? 37.79879,
+	// 	longitude: userLocationQuery.data?.location.lng ?? -122.442753,
+	// };
 
-    const preferences = {
-        shade: userQuery.data?.shade,
-        PoI: userQuery.data?.POI,
-        paved: userQuery.data?.paved,
-        lit: userQuery.data?.lit,
-        distance: userQuery.data?.distance,
-    };
+	// const sendUserLocation = () => {
+	// 	fetch(`${URL}/user`, {
+	// 		method: 'POST',
+	// 		body: JSON.stringify(userLocationQuery.data),
+	// 	});
+	// };
 
-    const fetchFinalRoute = async () => {
-        const res = await fetch(`${URL}/route`, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({ location: origin, preferences: preferences }),
-        });
-        return res.json();
-    };
+	// const fetchFinalRoute = async () => {
+	// 	try {
+	// 		const res = await fetch(`${URL}/route`);
+	// 		return res.json() as Promise<LatLng[]>;
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
 
-    const finalRouteQuery = useQuery({
-        queryKey: ['finalRoute'],
-        queryFn: fetchFinalRoute,
-        // enabled: !!userLocationQuery.data,
-    });
+	const preferences = {
+		shade: userQuery.data?.shade,
+		PoI: userQuery.data?.POI,
+		paved: userQuery.data?.paved,
+		lit: userQuery.data?.lit,
+		distance: userQuery.data?.distance,
+	};
 
-    const origin: LatLng = {
-        // latitude: 38.89963,
-        // longitude: -77.0489,
-        latitude: 38.899176,
-        longitude: -77.047092,
-    };
+	const fetchFinalRoute = async () => {
+		const res = await fetch(`${URL}/route`, {
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify({ location: origin, preferences: preferences }),
+		});
+		return res.json();
+	};
 
-    const dest: LatLng = { latitude: 38.89963, longitude: -77.0489 };
+	const finalRouteQuery = useQuery({
+		queryKey: ['finalRoute'],
+		queryFn: fetchFinalRoute,
+		// enabled: !!userLocationQuery.data,
+	});
 
-    // if (userLocationQuery.isLoading) {
-    // 	return (
-    // 		<SafeAreaView>
-    // 			<Text>Loading user location data</Text>
-    // 		</SafeAreaView>
-    // 	);
-    // }
+	const showTrees = (n: number) => {
+		setTrees([...Array(n).keys()].fill(0));
+	};
 
-    // if (userLocationQuery.isError) {
-    // 	return (
-    // 		<SafeAreaView>
-    // 			<Text>
-    // 				Error getting user location data, {(userLocationQuery.error as Error).message}
-    // 			</Text>
-    // 		</SafeAreaView>
-    // 	);
-    // }
+	const origin: LatLng = {
+		// latitude: 38.89963,
+		// longitude: -77.0489,
+		latitude: 38.899176,
+		longitude: -77.047092,
+	};
 
-    if (finalRouteQuery.isLoading) {
-        return (
-            <SafeAreaView className='flex items-center justify-center h-screen -m-24 bg-sky-100'>
-                <Image
-                    source={require('../../assets/bird.gif')}
-                    className='h-80 w-80'
-                />
-                <Text className='m-2'>This may take a minute</Text>
-            </SafeAreaView>
-        );
-    }
+	const dest: LatLng = { latitude: 38.89963, longitude: -77.0489 };
 
-    if (finalRouteQuery.isError) {
-        return (
-            <SafeAreaView>
-                <Text>
-                    Error getting route data, {(finalRouteQuery.error as Error).message}
-                </Text>
-            </SafeAreaView>
-        );
-    }
+	useEffect(() => {
+		for (let i = 0; i < currentRoute?.legs.length; i++) {
+			for (let j = 0; j < currentRoute?.legs[i].steps.length; j++) {
+				console.log(currentRoute?.legs[i].steps[j]);
+			}
+		}
+	});
 
-    return (
-        <SafeAreaView className='flex items-center justify-center'>
-            <MapView
-                ref={mapRef}
-                provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                initialRegion={region}
-                // region={region}
-                // this could be causing issue with scrolling w using old region
-                onRegionChange={setRegion}
-                // region={INITIAL_REGION}
-                // onRegionChangeComplete={() => {
-                // 	mapRef.current?.animateToRegion(INITIAL_REGION)
-                // }}
-                showsUserLocation
-                onUserLocationChange={e => {
-                    setRegion({
-                        latitude: e.nativeEvent.coordinate?.latitude!,
-                        longitude: e.nativeEvent.coordinate?.longitude!,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
-                    });
-                    mapRef.current?.animateToRegion(region);
-                }}
-            >
-                {finalRouteQuery.data !== undefined ? (
-                    <MapViewDirections
-                        origin={finalRouteQuery.data.route[0] ?? origin}
-                        destination={finalRouteQuery.data.route.at(-1) ?? dest}
-                        waypoints={finalRouteQuery.data.route.slice(1, 24)}
-                        apikey={GOOGLE_MAPS_API_KEY}
-                        mode='WALKING'
-                        splitWaypoints={true}
-                        strokeWidth={3}
-                        strokeColor='hotpink'
-                        onStart={s => console.log("START: ", s)}
-                        onError={e => console.error("ERROR: ", e)}
-                        onReady={res => {
-                            // this object gives us the directions/instructions
-                            // we need to find a way to keep up with these as we move
-                            // probably using user location along with location in the
-                            // response to tell where the user is
-                            console.log("LEGS: ", res.legs[0].steps);
-                            setDuration(res.duration.toFixed(0));
-                            setDistance(res.distance.toFixed(1));
-                            mapRef.current?.fitToCoordinates(res.coordinates, {
-                                edgePadding: {
-                                    top: height / 20,
-                                    right: width / 20,
-                                    bottom: height / 20,
-                                    left: width / 20,
-                                },
-                            });
-                        }}
-                    ></MapViewDirections>
-                ) : (
-                    <Text>{JSON.stringify(finalRouteQuery)}</Text>
-                )}
-            </MapView>
-            {duration && (
-                <Text className='absolute top-0 right-0 m-2 font-bold'>
-                    {duration} minutes
-                </Text>
-            )}
-            {distance && (
-                <Text className='absolute top-4 right-0 m-2 font-bold'>
-                    {distance} km
-                </Text>
-            )}
-        </SafeAreaView>
-    );
+	// if (userLocationQuery.isLoading) {
+	// 	return (
+	// 		<SafeAreaView>
+	// 			<Text>Loading user location data</Text>
+	// 		</SafeAreaView>
+	// 	);
+	// }
+
+	// if (userLocationQuery.isError) {
+	// 	return (
+	// 		<SafeAreaView>
+	// 			<Text>
+	// 				Error getting user location data, {(userLocationQuery.error as Error).message}
+	// 			</Text>
+	// 		</SafeAreaView>
+	// 	);
+	// }
+
+	if (finalRouteQuery.isLoading) {
+		return (
+			<SafeAreaView className='flex items-center justify-center h-screen -m-24 bg-sky-100'>
+				<Image
+					source={require('../../assets/bird.gif')}
+					className='h-80 w-80'
+				/>
+				<Text className='m-2'>This may take a minute</Text>
+			</SafeAreaView>
+		);
+	}
+
+	if (finalRouteQuery.isError) {
+		return (
+			<SafeAreaView>
+				<Text>
+					Error getting route data, {(finalRouteQuery.error as Error).message}
+				</Text>
+			</SafeAreaView>
+		);
+	}
+
+	return (
+		<SafeAreaView className='flex items-center justify-center'>
+			<MapView
+				ref={mapRef}
+				provider={PROVIDER_GOOGLE}
+				style={styles.map}
+				initialRegion={region}
+				// region={region}
+				// this could be causing issue with scrolling w using old region
+				onRegionChange={setRegion}
+				// region={INITIAL_REGION}
+				// onRegionChangeComplete={() => {
+				// 	mapRef.current?.animateToRegion(INITIAL_REGION)
+				// }}
+				showsUserLocation
+				onUserLocationChange={e => {
+					setRegion({
+						latitude: e.nativeEvent.coordinate?.latitude!,
+						longitude: e.nativeEvent.coordinate?.longitude!,
+						latitudeDelta: 0.01,
+						longitudeDelta: 0.01,
+					});
+					mapRef.current?.animateToRegion(region);
+				}}
+			>
+				{finalRouteQuery.data !== undefined ? (
+					<>
+						<MapViewDirections
+							origin={finalRouteQuery.data.route[0] ?? origin}
+							destination={finalRouteQuery.data.route.at(-1) ?? dest}
+							waypoints={finalRouteQuery.data.route.slice(1, 24)}
+							apikey={GOOGLE_MAPS_API_KEY}
+							mode='WALKING'
+							splitWaypoints={true}
+							strokeWidth={3}
+							strokeColor='hotpink'
+							onStart={s => console.log('START: ', s)}
+							onError={e => console.error('ERROR: ', e)}
+							onReady={res => {
+								// this object gives us the directions/instructions
+								// we need to find a way to keep up with these as we move
+								// probably using user location along with location in the
+								// response to tell where the user is
+								// console.log('LEGS: ', res.legs);
+								setCurrentRoute(res);
+								setDuration(res.duration.toFixed(0));
+								setDistance(res.distance.toFixed(1));
+								mapRef.current?.fitToCoordinates(res.coordinates, {
+									edgePadding: {
+										top: height / 20,
+										right: width / 20,
+										bottom: height / 20,
+										left: width / 20,
+									},
+								});
+							}}
+						></MapViewDirections>
+						{currentRoute?.legs.flatMap(leg =>
+							leg.steps.flatMap(step => (
+								<Marker
+									key={step.polyline.points}
+									coordinate={{
+										latitude: step.start_location.lat,
+										longitude: step.start_location.lng,
+									}}
+									title={step.html_instructions.replace(/<[^>]+>/g, '')}
+									description={step.distance.text}
+									pinColor={
+										step.polyline.points === currentStep ? 'blue' : 'red'
+									}
+									onPress={() => setCurrentStep(step.polyline.points)}
+								></Marker>
+							))
+						)}
+					</>
+				) : (
+					<Text>{JSON.stringify(finalRouteQuery)}</Text>
+				)}
+			</MapView>
+			{duration && (
+				<Text className='absolute top-0 right-0 m-2 font-bold'>
+					{duration} minutes
+				</Text>
+			)}
+			{distance && (
+				<Text className='absolute top-4 right-0 m-2 font-bold'>
+					{distance} km
+				</Text>
+			)}
+			<Image
+				source={require('../../assets/tree.png')}
+				className='absolute top-8 right-0 m-2 w-16 h-16'
+			></Image>
+		</SafeAreaView>
+	);
 };
 
 const styles = StyleSheet.create({
-    map: {
-        // flex: 1,
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
-    },
+	map: {
+		// flex: 1,
+		height: Dimensions.get('window').height,
+		width: Dimensions.get('window').width,
+	},
 });
