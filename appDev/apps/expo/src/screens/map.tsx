@@ -21,7 +21,8 @@ import MapViewDirections, {
 import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
 import { trpc } from '../utils/trpc';
 
-const URL = 'http://161.253.78.224:9090';
+// const URL = 'http://161.253.78.224:9090';
+const URL = 'http://128.164.194.169:9090';
 
 export interface GoogleLocationResponse {
 	location: Location;
@@ -184,7 +185,7 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	}
 
 	return (
-		<SafeAreaView className='flex items-center justify-center'>
+		<SafeAreaView className='flex items-center justify-center w-full h-full'>
 			<MapView
 				ref={mapRef}
 				provider={PROVIDER_GOOGLE}
@@ -211,9 +212,9 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 				{finalRouteQuery.data !== undefined ? (
 					<>
 						<MapViewDirections
-							origin={finalRouteQuery.data.route[0] ?? origin}
-							destination={finalRouteQuery.data.route.at(-1) ?? dest}
-							waypoints={finalRouteQuery.data.route.slice(1, 24)}
+							origin={finalRouteQuery.data.route1[0] ?? origin}
+							destination={finalRouteQuery.data.route1.at(-1) ?? dest}
+							waypoints={finalRouteQuery.data.route1.slice(1, 24)}
 							apikey={GOOGLE_MAPS_API_KEY}
 							mode='WALKING'
 							splitWaypoints={true}
@@ -262,20 +263,40 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 					<Text>{JSON.stringify(finalRouteQuery)}</Text>
 				)}
 			</MapView>
-			{duration && (
-				<Text className='absolute top-0 right-0 m-2 font-bold'>
-					{duration} minutes
+			<View className='absolute top-0 h-24 w-5/6 p-2 bg-gray-400/75 my-2 border border-gray-600 flex items-center justify-center rounded-xl'>
+				<Text className='text-xl font-bold'>
+					{currentStep != '' ? currentStep : 'Start Walking'}
 				</Text>
-			)}
-			{distance && (
-				<Text className='absolute top-4 right-0 m-2 font-bold'>
-					{distance} km
+			</View>
+			<View className='absolute bottom-8 left-0 m-2 flex items-start justify-start bg-gray-400/50 rounded-xl p-2'>
+				{duration && <Text className='font-bold'>{duration} minutes</Text>}
+				{distance && <Text className='font-bold'>{distance} km</Text>}
+			</View>
+			<View className='absolute bottom-8 right-0 m-2 flex items-end justify-end bg-gray-400/50 rounded-xl p-2'>
+				<Text className='text-2xl'>
+					{finalRouteQuery.data.score1.shade === 0
+						? finalRouteQuery.data.score1.shade
+						: '🌳'.repeat(finalRouteQuery.data.score1.shade)}
 				</Text>
-			)}
-			<Image
-				source={require('../../assets/tree.png')}
-				className='absolute top-8 right-0 m-2 w-16 h-16'
-			></Image>
+				<Text className='text-2xl'>
+					{finalRouteQuery.data.score1.poi === 0
+						? finalRouteQuery.data.score1.poi
+						: '🗿'.repeat(finalRouteQuery.data.score1.poi)}
+				</Text>
+				<Text className='text-2xl'>
+					{finalRouteQuery.data.score1.paved === 0
+						? finalRouteQuery.data.score1.paved
+						: '🛣️'.repeat(finalRouteQuery.data.score1.paved)}
+				</Text>
+				<Text className='text-2xl'>
+					{finalRouteQuery.data.score1.lit === 0
+						? finalRouteQuery.data.score1.lit
+						: '💡'.repeat(finalRouteQuery.data.score1.lit)}
+				</Text>
+			</View>
+			{/* <View className='absolute bottom-8'>
+				<Text>{JSON.stringify(finalRouteQuery.data.score1)}</Text>
+			</View> */}
 		</SafeAreaView>
 	);
 };

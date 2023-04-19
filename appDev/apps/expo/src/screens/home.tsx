@@ -1,6 +1,5 @@
 import {
 	SafeAreaView,
-	View,
 	Text,
 	Pressable,
 	Dimensions,
@@ -62,16 +61,16 @@ export const HomeScreen = ({
 				}}
 			/>
 			<Pressable
-				className='absolute top-4 right-4 bg-sky-300 p-2 rounded-xl active:bg-sky-500'
+				className='absolute top-4 right-4 bg-gray-400 p-4 rounded-xl'
 				onPress={() => navigation.navigate('Profile', { name: name })}
 			>
 				<Text>Profile</Text>
 			</Pressable>
 			<Pressable
-				className='absolute bottom-24 bg-sky-300 p-4 w-3/4 items-center rounded-xl active:bg-sky-500'
+				className='absolute bottom-24 bg-gray-400 p-4 w-3/4 items-center rounded-xl active:bg-gray-600'
 				onPress={() => navigation.navigate('Map', { name: name })}
 			>
-				<Text>Start Walking</Text>
+				<Text className='text-xl'>Start Walking</Text>
 			</Pressable>
 		</SafeAreaView>
 	);
