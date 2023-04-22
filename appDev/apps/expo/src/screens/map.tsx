@@ -62,23 +62,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	const [duration, setDuration] = useState<string>('');
 	const [distance, setDistance] = useState<string>('');
 
-	// const fetchLocation = async (): Promise<GoogleLocationResponse> =>
-	//	(
-	//		await fetch(
-	//			`https://www.googleapis.com/geolocation/v1/geolocate?key=${GOOGLE_MAPS_API_KEY}`
-	//		)
-	//	).json();
-
-	// const userLocationQuery = useQuery({
-	// 	queryKey: ['userLocation'],
-	// 	queryFn: fetchLocation,
-	// });
-
-	// const userLocation: LatLng = {
-	// 	latitude: userLocationQuery.data?.location.lat ?? 37.79879,
-	// 	longitude: userLocationQuery.data?.location.lng ?? -122.442753,
-	// };
-
 	const preferences = {
 		shade: userQuery.data?.shade,
 		PoI: userQuery.data?.POI,
@@ -102,7 +85,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	const finalRouteQuery = useQuery({
 		queryKey: ['finalRoute'],
 		queryFn: fetchFinalRoute,
-		// enabled: !!userLocationQuery.data,
 	});
 
 	const origin: LatLng = {
@@ -121,24 +103,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 			}
 		}
 	});
-
-	// if (userLocationQuery.isLoading) {
-	// 	return (
-	// 		<SafeAreaView>
-	// 			<Text>Loading user location data</Text>
-	// 		</SafeAreaView>
-	// 	);
-	// }
-
-	// if (userLocationQuery.isError) {
-	// 	return (
-	// 		<SafeAreaView>
-	// 			<Text>
-	// 				Error getting user location data, {(userLocationQuery.error as Error).message}
-	// 			</Text>
-	// 		</SafeAreaView>
-	// 	);
-	// }
 
 	if (finalRouteQuery.isLoading) {
 		return (
