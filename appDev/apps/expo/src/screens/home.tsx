@@ -61,13 +61,13 @@ export const HomeScreen = ({
 				}}
 			/>
 			<Pressable
-				className='absolute top-4 right-4 bg-gray-400 p-4 rounded-xl'
+				className='absolute top-4 right-4 shadow-xl bg-white p-4 rounded-xl active:bg-gray-200'
 				onPress={() => navigation.navigate('Profile', { name: name })}
 			>
 				<Text>Profile</Text>
 			</Pressable>
 			<Pressable
-				className='absolute bottom-24 bg-gray-400 p-4 w-3/4 items-center rounded-xl active:bg-gray-600'
+				className='absolute bottom-24 bg-white shadow-xl p-4 w-3/4 items-center rounded-xl active:bg-gray-200'
 				onPress={() => navigation.navigate('Map', { name: name })}
 			>
 				<Text className='text-xl'>Start Walking</Text>

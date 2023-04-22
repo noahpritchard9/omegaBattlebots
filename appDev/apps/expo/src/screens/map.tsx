@@ -22,7 +22,7 @@ import { GOOGLE_MAPS_API_KEY } from '../apiKeys';
 import { trpc } from '../utils/trpc';
 
 // const URL = 'http://161.253.78.224:9090';
-const URL = 'http://128.164.194.169:9090';
+const URL = 'http://128.164.101.14:9090';
 
 export interface GoogleLocationResponse {
 	location: Location;
@@ -62,8 +62,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	const [duration, setDuration] = useState<string>('');
 	const [distance, setDistance] = useState<string>('');
 
-	const [trees, setTrees] = useState<number[]>([]);
-
 	// const fetchLocation = async (): Promise<GoogleLocationResponse> =>
 	//	(
 	//		await fetch(
@@ -79,22 +77,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 	// const userLocation: LatLng = {
 	// 	latitude: userLocationQuery.data?.location.lat ?? 37.79879,
 	// 	longitude: userLocationQuery.data?.location.lng ?? -122.442753,
-	// };
-
-	// const sendUserLocation = () => {
-	// 	fetch(`${URL}/user`, {
-	// 		method: 'POST',
-	// 		body: JSON.stringify(userLocationQuery.data),
-	// 	});
-	// };
-
-	// const fetchFinalRoute = async () => {
-	// 	try {
-	// 		const res = await fetch(`${URL}/route`);
-	// 		return res.json() as Promise<LatLng[]>;
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
 	// };
 
 	const preferences = {
@@ -122,10 +104,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 		queryFn: fetchFinalRoute,
 		// enabled: !!userLocationQuery.data,
 	});
-
-	const showTrees = (n: number) => {
-		setTrees([...Array(n).keys()].fill(0));
-	};
 
 	const origin: LatLng = {
 		// latitude: 38.89963,
@@ -294,9 +272,6 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
 						: '💡'.repeat(finalRouteQuery.data.score1.lit)}
 				</Text>
 			</View>
-			{/* <View className='absolute bottom-8'>
-				<Text>{JSON.stringify(finalRouteQuery.data.score1)}</Text>
-			</View> */}
 		</SafeAreaView>
 	);
 };
