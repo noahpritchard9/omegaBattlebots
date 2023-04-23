@@ -27,12 +27,16 @@ class UpdateMap(osmium.SimpleHandler):
         if n.id in self.footwaysSimplified:
             for tag in n.tags:
                 self.footwaysSimplified.nodes[n.id][tag.k] = tag.v
+        if "tourism" in n.tags:
+            node = ox.distance.nearest_nodes(self.footwaysSimplified, n.location.lon, n.location.lat)
+            self.footwaysSimplified.nodes[node]['PoI'] = 'yes'
     
     def relation(self, r):
         for x in r.members:
             if x.type == 'n' and x.ref in self.footwaysSimplified:
                 for tag in r.tags:
                     self.footwaysSimplified.nodes[x.ref][tag.k] = tag.v
+            
 
 
 
@@ -48,6 +52,7 @@ class UpdateMap2(osmium.SimpleHandler):
     def way(self, w):
         node = ox.distance.nearest_nodes(self.footwaysSimplified, self.dc.nodes[w.nodes[0]]['y'], self.dc.nodes[w.nodes[0]]['x'])
         self.footwaysSimplified.nodes[node]['PoI'] = 'yes'
+        
                     
     
                             

@@ -29,7 +29,7 @@ class setup():
         UpdateMap(map).apply_file(data)
 
         #now let's add points of interest
-        UpdateMap2(map, dc).apply_file('PoI.osm')
+        #UpdateMap2(map, dc).apply_file('PoI.osm')
         
         #now we add shade tags:
         # i = 1

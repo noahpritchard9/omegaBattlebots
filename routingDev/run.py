@@ -41,7 +41,8 @@ class run:
 
         #Let's create our general storage for routes:
         startPoint = ox.distance.nearest_nodes(footwaysSimplified, X=locData[1], Y=locData[0])
-        routes = [[0,0,startPoint]]
+        #routes = [[Dist, Total score, shade score, PoI score, paved score, lit score, route]]
+        routes = [[0,0,0,0,0,0,startPoint]]
 
         #elevation requires running a different route generator, so we'll differentiate that here:
         if elevation == 1:
@@ -56,7 +57,7 @@ class run:
             i = 0
             iter = 0
             #while loop to tell us what percentage of routes we want to be over the threshold
-            while i < len(routes) / 100 and i < 1000:
+            while i < len(routes) / 100 and i < 10:
                 tempRoutes = []
                 #reset i to account for routes this run past distance
                 i = 0
@@ -83,6 +84,8 @@ class run:
 
                             score().score(paved, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
 
+                            score().score(PoI, "PoI", "yes", nbr, tempRoutes, footwaysSimplified, points = 5)
+
                             tempRoutes[-1].append(nbr)
                             
                             #add in distance
@@ -108,18 +111,24 @@ class run:
             # This will also allow us to evaluate the distance in a simple manner
             for r in routes:
                 startDist=r[0]
-                short = ox.shortest_path(footwaysSimplified, r[-1], r[2])
+                #NOTE: r[6] denotes the first node of our actual route. Before this is scoring and dist
+                short = ox.shortest_path(footwaysSimplified, r[-1], r[6])
                 try:
                     for i in range(len(short)-1):
                         r[0] += footwaysSimplified[short[i]][short[i+1]][0]['length']
 
                     if len(short) > 1:
-                        for n in short[1:]:
+                    #NOTE: Changed from 1 to 0 in attempts to get full circular path to return
+                        for n in short[0:]:
                             r.append(n)
                     
                     #this part handles the scoring added:
-                    #Scoring is: 
-                    r[1] += abs((((r[0]-startDist)/(length)) * 5) - 5)
+                    #Scoring USED TO BE: 
+                    #r[1] += abs((((r[0]-startDist)/(length)) * 5) - 5)
+                    #Scoring is now:
+                    y = 10  #y represents how fast we want diminish our score
+                    k = 20  #k represents our peak score
+                    r[1] += k/((abs((1/y)*(r[0]-startDist) - (length))) + 1)
                 except TypeError:
                     print('Did not return shortest path')
                 #r[0] += nx.shortest_path_length(footwaysSimplified, r[2], r[-1], weight='length')
@@ -136,10 +145,31 @@ class run:
             #Send the data back to the API
 
             returnRoute = []
-            for i in range(2, len(finalRoutes[-1])):
+            for i in range(6, len(finalRoutes[-1])):
                 returnRoute.append([footwaysSimplified.nodes[finalRoutes[-1][i]]['y'], footwaysSimplified.nodes[finalRoutes[-1][i]]['x']])
             obj = [{'latitude': x, 'longitude': y} for [x, y] in returnRoute]
-            json = {'route': obj}
+            # Total score, shade score, PoI score, paved score, lit score
+            score1 = {
+                'total': finalRoutes[-1][1],
+                'shade': finalRoutes[-1][2],
+                'poi': finalRoutes[-1][3],
+                'paved': finalRoutes[-1][4],
+                'lit': finalRoutes[-1][5],
+            }
+            
+            returnRoute = []
+            for i in range(6, len(finalRoutes[-2])):
+                returnRoute.append([footwaysSimplified.nodes[finalRoutes[-2][i]]['y'], footwaysSimplified.nodes[finalRoutes[-2][i]]['x']])
+            obj2 = [{'latitude': x, 'longitude': y} for [x, y] in returnRoute]
+            # Total score, shade score, PoI score, paved score, lit score
+            score2 = {
+                'total': finalRoutes[-2][1],
+                'shade': finalRoutes[-2][2],
+                'poi': finalRoutes[-2][3],
+                'paved': finalRoutes[-2][4],
+                'lit': finalRoutes[-2][5],
+            }
+            json = {'route1': obj, 'score1': score1, 'route2': obj2, 'score2': score2}
             return json
             #communication().postRoute(json)
 
