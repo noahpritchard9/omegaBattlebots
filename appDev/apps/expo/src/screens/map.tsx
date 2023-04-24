@@ -268,11 +268,11 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
         {pref_names.map((pref) => {
           let pref_score = finalRouteQuery.data.score1[pref.toLowerCase()];
           if (pref_score < 0) {
-            return <View className="bg-red-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return <View key={pref} className="bg-red-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
           } else if (pref_score == 0) {
-            return <View className="bg-yellow-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return <View key={pref} className="bg-yellow-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
           } else if (pref_score > 0) {
-            return <View className="bg-green-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return <View key={pref} className="bg-green-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
           }
         })}
       </View>
