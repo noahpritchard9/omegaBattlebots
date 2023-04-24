@@ -1,6 +1,5 @@
 import osmnx as ox
 from osmiumUpdates import UpdateMap
-from osmiumUpdates import UpdateMap2
 import pandas as pd
 import csv
 import networkx as nx
@@ -27,9 +26,6 @@ class setup():
     #adds tags to the file from our data file
     def addTags(self, data, map, dc):
         UpdateMap(map).apply_file(data)
-
-        #now let's add points of interest
-        #UpdateMap2(map, dc).apply_file('PoI.osm')
         
         #now we add shade tags:
         # i = 1

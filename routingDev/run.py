@@ -69,28 +69,36 @@ class run:
                     if r[0] < (length):
                         #look into all of its neighbors
                         for nbr in footwaysSimplified[r[-1]]:
-                            G = r.copy()
-                            tempRoutes.append(G)
-                            
-                            #Let's update our reward values
-                            #If we have this node already, we want a penalty
-                            if nbr in tempRoutes[-1]:
+                            numNode = r.count(nbr)
+                            if numNode == 1:
+                                G = r.copy()
+                                tempRoutes.append(G)
                                 tempRoutes[-1][1] -= 10
-
-                            #Update scores for our various preferences                    
-                            score().score(lit, "lit", "yes", nbr, tempRoutes, footwaysSimplified)
+                                tempRoutes[-1].append(nbr)
+                                
+                                #add in distance
+                                tempRoutes[-1][0] += footwaysSimplified[r[-1]][nbr][0]['length']
                             
-                            score().score(paved, "paved", "yes", nbr, tempRoutes, footwaysSimplified)                                    
+                            elif numNode > 1:
+                                continue
 
-                            score().score(paved, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
+                            else:
+                                G = r.copy()
+                                tempRoutes.append(G)
+                                #Update scores for our various preferences                    
+                                score().score(lit, "lit", "yes", nbr, tempRoutes, footwaysSimplified)
+                                
+                                score().score(paved, "paved", "yes", nbr, tempRoutes, footwaysSimplified)                                    
 
-                            score().score(PoI, "PoI", "yes", nbr, tempRoutes, footwaysSimplified, points = 5)
+                                score().score(paved, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
 
-                            tempRoutes[-1].append(nbr)
-                            
-                            #add in distance
-                            tempRoutes[-1][0] += footwaysSimplified[r[-1]][nbr][0]['length']
-                        
+                                score().score(PoI, "PoI", "yes", nbr, tempRoutes, footwaysSimplified, points = 5)
+
+                                tempRoutes[-1].append(nbr)
+                                
+                                #add in distance
+                                tempRoutes[-1][0] += footwaysSimplified[r[-1]][nbr][0]['length']
+                                                    
                     else:
                         i += 1
                 routes = tempRoutes
