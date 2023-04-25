@@ -70,7 +70,8 @@ class Route(Resource):
 api.add_resource(Route, "/route")
 
 if (__name__) == "__main__":
+    # from waitress import serve
     #Here we have setup, dependent on whether we really need it or not
     #footwaysSimplified = setup().completeSetup("dc.osm", "finalSimplified.osm")
     footwaysSimplified = setup().loadSetup()
-    app.run(debug=True, port=9090, host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0", port=9090)

@@ -7,6 +7,7 @@ from buildingsCalc import buildings
 import sys
 import timeit
 import time
+from tiffShade import tiffShade
 
 
 
@@ -31,35 +32,17 @@ class setup():
     def addTags(self, data, map, dc):
         UpdateMap(map).apply_file(data)
         
-        #now we add shade tags:
-        # i = 1
-        # start = timeit.timeit()
-        # try:
-        #     for node in map.nodes:
-        #         print(map.nodes[node])
-        #         #footwaysSimplified.nodes[n.ref][tag.k] = tag.v
-        #         if i % 6000 == 0:
-        #             end = timeit.timeit()
-        #             if end-start < 60:
-        #                 time.sleep(60 - (end-start))
-        #                 start = timeit.timeit()
-        #         latitude = map.nodes[node]['y']
-        #         longitude = map.nodes[node]['x']
-        #         b = buildings(latitude, longitude)
-        #         shade = b.shade(latitude, longitude)
-        #         shade = shade.lower()
-        #         node[node.id]['shade'] = shade
-        # except KeyboardInterrupt:
-        #     ox.save_graph_xml(map, filepath="shade.osm")
-        #     ox.save_graphml(map, filepath='shade.graphml')
-        #     ox.save_graph_geopackage(map, filepath='shade.gpkg')
-
-        #     print('Interrupted')
-        #     sys.exit(0)
-
-
-
-
+        shadeCalc = tiffShade()
+        for node in map.nodes:
+            latitude = map.nodes[node]['y']
+            longitude = map.nodes[node]['x']
+            shade = shadeCalc.isSunny(latitude, longitude)
+            
+            if shade == 0:
+                map.nodes[node]['shade'] = 'yes'
+            elif shade == 1:
+                map.nodes[node]['shade'] = 'no'
+                
     #retrieve walkways for routing
     def getWalkways(self):
         map = ox.graph_from_place('Washington, D.C., USA', network_type="walk")
