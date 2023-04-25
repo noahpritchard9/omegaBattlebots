@@ -90,7 +90,7 @@ class run:
                                 
                                 score().score(paved, "paved", "yes", nbr, tempRoutes, footwaysSimplified)                                    
 
-                                score().score(paved, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
+                                score().score(shade, "shade", "yes", nbr, tempRoutes, footwaysSimplified)
 
                                 score().score(PoI, "PoI", "yes", nbr, tempRoutes, footwaysSimplified, points = 5)
 
