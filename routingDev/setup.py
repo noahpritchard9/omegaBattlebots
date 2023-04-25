@@ -16,8 +16,12 @@ class setup():
         self.footwaysSimplified = self.createFootwaysSimplified(file)
         self.dc = self.createFootwaysSimplified('dc.osm')
         self.addTags(data, self.footwaysSimplified, self.dc)
+        ox.save_graphml(self.footwaysSimplified, 'savedFootways.graphml')
         return self.footwaysSimplified
 
+    #loads previous setup
+    def loadSetup(self, file='savedFootways.graphml'):
+        return ox.load_graphml(file)
 
     #creates networkx graph for the osm file input
     def createFootwaysSimplified(self, file):

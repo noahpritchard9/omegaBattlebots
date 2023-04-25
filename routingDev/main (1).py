@@ -71,5 +71,6 @@ api.add_resource(Route, "/route")
 
 if (__name__) == "__main__":
     #Here we have setup, dependent on whether we really need it or not
-    footwaysSimplified = setup().completeSetup("dc.osm", "finalSimplified.osm")
+    #footwaysSimplified = setup().completeSetup("dc.osm", "finalSimplified.osm")
+    footwaysSimplified = setup().loadSetup()
     app.run(debug=True, port=9090, host="0.0.0.0")
