@@ -11,5 +11,5 @@ title: About Our Work
 # Team Presentations
 
 - [Technical Presentation](./assets/files/Tech_Presentation.pptx)
-- [Elevator Pitch Presentation](./assets/files/Elevator_Pitch_Presentation.pptx.pptx)
-- [Final Presentation](./assets/files/Final_Presentation.pptx.pptx)
+- [Elevator Pitch Presentation](./assets/files/Elevator_Pitch_Presentation.pptx)
+- [Final Presentation](./assets/files/Final_Presentation.pptx)
