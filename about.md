@@ -3,6 +3,11 @@ layout: page
 title: About Our Work
 ---
 
+# Team Videos
+
+- [Promotional Video](./assets/files/sushi.mov)
+- [Techincal Demo Video]
+
 # Team Writings
 
 - Read [Writing 3](./assets/files/Writing_3.pdf)
