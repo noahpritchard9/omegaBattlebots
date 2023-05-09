@@ -8,7 +8,6 @@ import {
   Text,
   View,
   Pressable,
-  FlatList,
 } from "react-native";
 import MapView, {
   LatLng,
@@ -26,7 +25,7 @@ import { trpc } from "../utils/trpc";
 import { LocationObject } from "expo-location";
 
 const URL = "http://161.253.78.224:9090";
-//const URL = "http://128.164.193.142:9090";
+//const URL = "http://172.20.10.5:9090";
 
 export interface GoogleLocationResponse {
   location: Location;
@@ -230,10 +229,10 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
                 });
               }}
             ></MapViewDirections>
-            {currentRoute?.legs.flatMap((leg) =>
-              leg.steps.flatMap((step) => (
+            {currentRoute?.legs.flatMap((leg, i) =>
+              leg.steps.flatMap((step, j) => (
                 <Marker
-                  key={step.polyline.points}
+                  key={step.polyline.points + i + j}
                   coordinate={{
                     latitude: step.start_location.lat,
                     longitude: step.start_location.lng,
@@ -268,11 +267,32 @@ export const Map = ({ navigation, route }: { navigation: any; route: any }) => {
         {pref_names.map((pref) => {
           let pref_score = finalRouteQuery.data.score1[pref.toLowerCase()];
           if (pref_score < 0) {
-            return <View key={pref} className="bg-red-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return (
+              <View
+                key={pref}
+                className="bg-red-300 rounded-xl p-2 w-full items-center"
+              >
+                <Text>{pref}</Text>
+              </View>
+            );
           } else if (pref_score == 0) {
-            return <View key={pref} className="bg-yellow-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return (
+              <View
+                key={pref}
+                className="bg-yellow-300 rounded-xl p-2 w-full items-center"
+              >
+                <Text>{pref}</Text>
+              </View>
+            );
           } else if (pref_score > 0) {
-            return <View key={pref} className="bg-green-300 rounded-xl p-2 w-full items-center"><Text>{pref}</Text></View>;
+            return (
+              <View
+                key={pref}
+                className="bg-green-300 rounded-xl p-2 w-full items-center"
+              >
+                <Text>{pref}</Text>
+              </View>
+            );
           }
         })}
       </View>
