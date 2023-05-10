@@ -4,8 +4,8 @@
 - For all python libraries, a simple pip install for each should work to download them.
 - For the DC map data, please go to https://download.geofabrik.de/ and download the appropriate .osm file type. We have focused on Washington, D.C., so you only need to download that latest map for our application.
  - Once downloaded, put the Node, Way, Relation order in the file to Relation, Way, Node order. This ensures that tags are taken in the appropriate order. This can be done manually, or through a script.
- -  When downloaded, place it into the routingDev folder, and put the file name as the replacement to "dc.osm."
- -  For downloading the walkways map, please consult https://github.com/gboeing/osmnx-examples/blob/main/notebooks/01-overview-osmnx.ipynb as it gives a full tutorial on doing this. As specified, this can be for any location. This would be the file to replace the "finalSimplified.osm" file. 
+ -  When downloaded, place it into the routingDev folder, and put the file name in "main (1).py" as the replacement to "dc.osm."
+ -  For downloading the walkways map, please consult https://github.com/gboeing/osmnx-examples/blob/main/notebooks/01-overview-osmnx.ipynb as it gives a full tutorial on doing this. As specified, this can be for any location. This would be the file to replace the "finalSimplified.osm" file in "main (1).py". 
 -  To increase speed times of shade, https://shademap.app/ was used to download .tiff files for shading. Select a region, and export the tiff file. In routingDev/tiffShade.py, replace the file name with what was downloaded. 
 -  For the app portion, consult the appDev folder, with its own respective readme with instructions.
 
