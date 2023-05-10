@@ -6,12 +6,12 @@ title: About Our Work
 # Team Videos
 
 - [Promotional Video](./assets/files/sushi.mov)
-- [Techincal Demo Video]
+- [Techincal Demo Video](./assets/files/Journey_Complete.mp4)
 
 # Team Writings
 
-- Read [Writing 3](./assets/files/Writing_3.pdf)
-- Read [Writing 4](./assets/files/Writing_4.pdf)
+- Read [Writing 3](./assets/files/Writing_3.pdf) - Project Description
+- Read [Writing 4](./assets/files/Writing_4.pdf) - Technical Design Document
 
 # Team Presentations
 
