@@ -5,8 +5,8 @@ title: About Our Work
 
 # Team Videos
 
-- [Promotional Video](./assets/files/sushi.mov)
-- [Techincal Demo Video](./assets/files/sushi.mov)
+- Watch the [Promotional Video](./assets/files/sushi.mov)
+- Watch the [Techincal Demo Video](./assets/files/Journey_Complete.mp4)
 
 # Team Writings
 
