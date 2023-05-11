@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "expo",
+    "name": "omegaBattlebots Journey",
     "slug": "expo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.journey.omegaBattlebots"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,19 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "20a7bc85-fa0f-43f3-a9ea-6c4de9795a1c"
+      }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Journey to use your location."
+        }
+      ]
+    ]
   }
 }

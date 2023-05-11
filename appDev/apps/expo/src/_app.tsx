@@ -11,6 +11,8 @@ import { Profile } from './screens/profile';
 import { Map } from './screens/map';
 import { LogIn } from './screens/login';
 import { SignUp } from './screens/signup';
+import TestAPI from './screens/testapi';
+import Directions from './screens/directions';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +32,8 @@ const App = () => {
 						<Stack.Screen name='StatusBar' component={StatusBar} />
 						<Stack.Screen name='Profile' component={Profile} />
 						<Stack.Screen name='Map' component={Map} />
+						<Stack.Screen name='TestAPI' component={TestAPI} />
+                        <Stack.Screen name='Directions' component={Directions} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</SafeAreaProvider>

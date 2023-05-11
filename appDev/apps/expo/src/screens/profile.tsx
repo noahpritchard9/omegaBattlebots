@@ -30,7 +30,7 @@ export const Profile = ({
 	});
 
 	const [distance, setDistance] = useState(userQuery.data?.distance ?? 0);
-	const [elevation, setElevation] = useState(userQuery.data?.elevation ?? 0);
+	const [shade, setShade] = useState(userQuery.data?.shade ?? 0);
 	const [lit, setLit] = useState(userQuery.data?.lit ?? 0);
 	const [paved, setPaved] = useState(userQuery.data?.paved ?? 0);
 	const [POI, setPOI] = useState(userQuery.data?.POI ?? 0);
@@ -57,11 +57,11 @@ export const Profile = ({
 					/>
 				</View>
 				<View className='bg-gray-300 rounded-xl p-2 mb-2'>
-					<Text className='mb-1 text-2xl'>Elevation</Text>
+					<Text className='mb-1 text-2xl'>Shade</Text>
 					<View className='flex flex-row items-center justify-between'>
-						<Text>Lower</Text>
+						<Text>No</Text>
 						<Text>Default</Text>
-						<Text>Higher</Text>
+						<Text>Yes</Text>
 					</View>
 					<Slider
 						maximumValue={1}
@@ -69,8 +69,8 @@ export const Profile = ({
 						minimumTrackTintColor='#307ecc'
 						maximumTrackTintColor='#000000'
 						step={1}
-						value={elevation}
-						onValueChange={setElevation}
+						value={shade}
+						onValueChange={setShade}
 						tapToSeek
 					/>
 				</View>
@@ -134,7 +134,7 @@ export const Profile = ({
 					mutate({
 						id: userQuery.data?.id!,
 						distance: distance,
-						elevation: elevation,
+						shade: shade,
 						lit: lit,
 						paved: paved,
 						POI: POI,
